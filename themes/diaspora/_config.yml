@@ -1,8 +1,8 @@
 # 头部菜单，title: link
 menu:
-  Whoami: /whoami
-  Github: https://github.com/Fechin
-  Twitter: https://twitter.com/FechinLi
+  关于在下: /about
+  分类: /categories
+  标签: /tags
 
 # 是否显示目录
 TOC: false

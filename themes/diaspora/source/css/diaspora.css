@@ -79,17 +79,29 @@ body.touch #top {position:relative;}
 .bar {position:absolute;height:100%;background:rgba(0,0,0,.07);z-index:-1;width:0;-webkit-transition:width .5s ease;-moz-transition:width .5s ease;transition:width .5s ease;}
 .scrollbar {position:absolute;height:2px;width:10px;top:0;background-color:#50bcb6;-webkit-transition:width .5s ease;-moz-transition:width .5s ease;transition:width .5s ease;}
 body.touch .scrollbar {display:none;}
-.nav {position:fixed;height:100%;width:100%;background:rgba(255,255,255,.97);z-index:3;top:-100%;-webkit-transition:top 0.3s cubic-bezier(0.4,0,0.2,1);-moz-transition:top 0.3s cubic-bezier(0.4,0,0.2,1);transition:top 0.3s cubic-bezier(0.4,0,0.2,1);}
+.nav {
+  position: fixed;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.79);
+  box-shadow: -2px 2px 5px 0px;
+  z-index: 3;
+  top: -100%;
+  -webkit-transition: top 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  -moz-transition: top 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: top 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
 body.mu {overflow:hidden;height:100%;}
 html.mu {height:100%;}
 body.mu .icon-menu {color:#333;background: none;}
 body.mu .icon-menu:before {content:"\e607";}
 body.mu .nav {top:0;}
 body.mu .icon-logo {color:#333;}
-.menu {text-align:center;margin-top:200px;}
+.menu {text-align:center;padding:72px;}
 .menu li {font-size:18px;display:inline-block;margin:0 20px 20px 0;}
-.menu a {color:#666;letter-spacing:1px;}
-.menu a:hover {color:#333;}
+.menu a {color:#666;font-weight: bold; letter-spacing:1px;}
+.menu a:hover {
+  color: #753535;
+}
 .nav p {color:#999;font-size:12px;position:absolute;width:100%;text-align:center;bottom:30px;}
 .nav p a {color:#999;text-decoration:underline;}
 .nav p:first-letter {font-family:sans-serif;}
@@ -283,7 +295,7 @@ pre .keyword,pre .javascript .function {color:#cc99cc;}
   #vibrant div {opacity:0.3;}
   #container {padding-bottom:50px;}
   #post0 {bottom:60px;top:auto;width:70%;left:5%;}
-  .menu {width:80%;margin:160px auto 0;}
+  .menu {padding:50px;}
   .menu li {font-size:16px;}
   #pager {margin:30px 0 0;}
   h1.title {font-size:24px;}
