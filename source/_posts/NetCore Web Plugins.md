@@ -74,7 +74,7 @@ code ./
 
 编辑**Startup.cs** 中的`ConfigureServices`方法中使用以下代码配置MVC
 
-```c#
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     .....
@@ -129,7 +129,7 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 
 **PluginController.cs**
 
-```c#
+```csharp
 using Microsoft.AspNetCore.Mvc;
 
 namespace Plugin1
@@ -231,7 +231,7 @@ Plugin1.dll 除了需要响应请求之外，我还希望它能使用IOC容器�
 
 **IServicesRegister.cs**
 
-```c#
+```csharp
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Share
@@ -259,7 +259,7 @@ dotnet add .\Share\ package Microsoft.Extensions.DependencyInjection
 
 **Startup.cs**
 
-```c#
+```csharp
 ...
 public void ConfigureServices(IServiceCollection services)
 {
@@ -310,7 +310,7 @@ public void RegisterServices(IServiceCollection services)
 
 **ServicesRegister.cs** 
 
-```c#
+```csharp
 using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Share;
@@ -332,7 +332,7 @@ namespace Plugin1
 
 **IAddService.cs**
 
-```c#
+```csharp
 namespace Plugin1
 {
     public interface IAddService
@@ -346,7 +346,7 @@ namespace Plugin1
 
 **AddService.cs**
 
-```c#
+```csharp
 namespace Plugin1
 {
     public class AddService : IAddService
@@ -360,7 +360,7 @@ namespace Plugin1
 
 **PluginController.cs**
 
-```c#
+```csharp
 using Microsoft.AspNetCore.Mvc;
 
 namespace Plugin1
@@ -405,7 +405,7 @@ namespace Plugin1
 
 **ServicesRegister.cs** 中 方法  *RegisterServices*  如下
 
-```c#
+```csharp
  public class ServicesRegister : IServicesRegister
     {
         public void RegisterServices(IServiceCollection services)
@@ -427,7 +427,9 @@ namespace Plugin1
 
 #### Plugin1Config.cs
 
-```c#
+**Plugin1Config.cs**
+
+```csharp
 namespace Plugin1
 {
     public class Plugin1Config
@@ -458,7 +460,7 @@ namespace Plugin1
 
 **plugin1.json**
 
-```c#
+```json
 {
     "Plugin1Config":{
         "Name":"Plugin1",
@@ -492,7 +494,7 @@ dotnet add .\Plugin1\ package  Microsoft.Extensions.Options.ConfigurationExtensi
 
 另外 ，**Host** 中还需要在**Startup.cs**文件 *ConfigureServices*  方法中加上一行
 
-```
+```csharp
  services.AddOptions();
 ```
 
@@ -504,7 +506,7 @@ emmm，Controller的代码看起来是这样。
 
 **PluginController.cs**
 
-```c#
+```csharp
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -545,7 +547,7 @@ dotnet add .\Plugin1\ package  Microsoft.Extensions.Options
 
 现在构建项目，先执行哪个命令我就不多说了。但是，在启动项目之前，把**Plugin1**的配置文件**plugin1.json**拷贝到**Host**目录下。
 
-```c#
+```csharp
 // 这里我配置的是当前目录
 var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -591,7 +593,7 @@ var config = new ConfigurationBuilder()
 
 **HostDbContext.cs**
 
-```c#
+```csharp
 using System;
 using System.IO;
 using System.Linq;
@@ -658,7 +660,7 @@ dotnet add .\Share\ package  System.Linq
 
 **PluginData.cs**
 
-```c#
+```csharp
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -712,7 +714,7 @@ dotnet add .\Plugin1\ package  Microsoft.EntityFrameworkCore
 
 **Host** 中还需要在**Startup.cs**文件 *ConfigureServices*  方法中加上一行
 
-```c#
+```csharp
 services.AddDbContext<HostDbContext>();
 ```
 
@@ -724,7 +726,7 @@ services.AddDbContext<HostDbContext>();
 
 **PluginController.cs**
 
-```c#
+```csharp
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
@@ -774,7 +776,7 @@ dotnet add .\Plugin1\  package  System.Linq
 
 **HostDbContextExtensions.cs**
 
-```c#
+```csharp
 using Microsoft.EntityFrameworkCore;
 using Share;
 

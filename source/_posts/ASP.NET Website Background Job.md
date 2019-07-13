@@ -46,7 +46,9 @@ IIS Express
 
 **JobManager.cs**
 
-```c#
+```csharp
+using System;
+
 public class JobManager
 {
     private static Timer m_timer;
@@ -96,11 +98,11 @@ public class JobManager
 
 **Global.asax.cs**
 
-```c#
+```csharp
 protected async void Application_End(object sender,EventArgs e)
 {
     // 从这里唤醒你的网站，所以我们需要得到网站的地址
-    string url = "www.yousite.com";
+    string url = "http://www.yousite.com";
     try{
           using(HttpClient client = new HttpClient())
           {
@@ -123,7 +125,7 @@ protected async void Application_End(object sender,EventArgs e)
 
 ####  IRegisteredObject 接口
 
-```c#
+```csharp
 public interface IRegisteredObject
 {
     void Stop(bool immediate);
@@ -150,7 +152,7 @@ public interface IRegisteredObject
 
 首先要有一个类继承自 `IRegisteredObject`
 
-```c#
+```csharp
 public class JobHost:IRegisteredObject
 {
 	public JobHost()
@@ -183,7 +185,7 @@ public class JobHost:IRegisteredObject
 
 ##### JobHost.cs
 
-```c#
+```csharp
 class JobHost : IRegisteredObject
 {
     private readonly object m_lock = new object ();
@@ -223,7 +225,7 @@ class JobHost : IRegisteredObject
 
 ##### JobManager.cs
 
-```c#
+```csharp
 public class JobManager
 {
     private static Timer m_timer;

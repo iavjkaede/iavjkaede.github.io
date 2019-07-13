@@ -46,7 +46,7 @@ favicon: /img/favicon.ico
 
 # Highlight theme
 # ---------------
-highlight_theme: darker
+highlight_theme: default
 highlight_copy: true
 
 code_word_wrap: false
