@@ -12,7 +12,7 @@ cover: https://cloud.zzserver.top/s/8Sew3gzyter7fDj/preview
 
 
 
-# ASP.NET 之 IIS托管的网站后台任务
+# ASP.NET 之 IIS托管的后台任务
 
 ## 前言
 
@@ -76,15 +76,11 @@ public class JobManager
 
 `JobManager.Start();`
 
-
-
 有关Timer的用法 可参考MSDN
 
 [Timer Class](https://docs.microsoft.com/zh-cn/dotnet/api/system.threading.timer?f1url=https%3A%2F%2Fmsdn.microsoft.com%2Fquery%2Fdev15.query%3FappId%3DDev15IDEF1%26l%3DZH-CN%26k%3Dk(System.Threading.Timer);k(TargetFrameworkMoniker-.NETFramework,Version%3Dv4.6.2);k(DevLang-csharp)%26rd%3Dtrue&view=netframework-4.8)
 
-
-
-这样实现的任务有个致命缺陷，IIS 应用程序池自动回收的时候会毫不留情的将其摧毁，
+**这样实现的任务有个致命缺陷，IIS 应用程序池自动回收的时候会毫不留情的将其摧毁。**
 
 下面有两种异曲同工的解决方式。
 
@@ -92,7 +88,7 @@ public class JobManager
 
 ###  Application_End 中唤醒 IIS
 
-​	当我们遇到问题的时候第一时间就是先自行解决，如果问题实在棘手导致我们手足无措的时候，我们会从网上寻找解决方法。所以，找到了这个方法（如题）
+​	应用程序池进行回收的时候会调用*Application_End* 方法，所以，在这里继续将IIS唤醒即可。
 
 ​	我把关键的代码放在这里
 
@@ -276,8 +272,6 @@ public class JobManager
 
 [The Dangers of Implementing Recurring Background Tasks In ASP.NET](https://haacked.com/archive/2011/10/16/the-dangers-of-implementing-recurring-background-tasks-in-asp-net.aspx/) 
 
-感谢他。
-
 
 
 ---
@@ -288,15 +282,11 @@ public class JobManager
 
    “ 嘿，好孩子，该工作了。”
 
-   没错，就是这么残酷。
+   没错，就是这么残酷😂。
 
 
 
 **当我们需要持续稳定的执行后台任务的时候，更好的方式应该是写一个服务程序，或者控制台**
-
-当然，每个人都有自己的需求，这里只是提供一种方式而已。
-
-如果有不合理的地方，望指出，感谢！
 
 
 

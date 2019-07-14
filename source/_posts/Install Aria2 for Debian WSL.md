@@ -34,7 +34,7 @@ AriaNg 版本 **1.1.1**
 
 ### 安装aria2
 
-首先我们进行[aria2](https://github.com/aria2/aria2) 的安装
+首先进行[aria2](https://github.com/aria2/aria2) 的安装
 
 ```bash
 sudo apt install aria2
@@ -46,8 +46,6 @@ sudo apt install aria2
 aria2c --version
 ```
 
-
-
 成功输出版本信息后，安装就完成了
 
 
@@ -58,9 +56,9 @@ aria2c --version
 
 安装是很简单，配置aria2 却是有些棘手的，当然不进行配置也是可以使用的，这里不过多介绍，讲一下我自己的配置。
 
-我们需要创建三个文件，用来保存aria2 的配置，会话和日志。
+需要创建三个文件，分别用来保存aria2 的配置、会话和日志。
 
-我是在用户目录下建立的文件夹，其实可以将配置目录放在Windows目录下，这样你重新安装
+我这里在用户目录下建立文件夹，其实可以将配置目录放在Windows目录下，这样重新安装
 
 WSL的时候就无需重新创建编写配置文件了。
 
@@ -115,7 +113,7 @@ rpc-listen-port=6800
 aria2c --conf-path /home/$LOGNAME/.aria2/aria2.conf
 ```
 
-*配置这个地方可能会有坑，如果你的配置文件写错了，这个命令可能没有任何报错就退出了，或者rpc没有成功开启。执行完这条命令后，在浏览器地址栏输入http://localhost:6800*
+*配置这个地方可能会有坑，如果配置文件写错了，这个命令可能没有任何报错就退出了，或者rpc没有成功开启。执行完这条命令后，在浏览器地址栏输入http://localhost:6800*
 
 *如果出现404而不是未响应，说明rpc是正常开启了的（在没有其他进程占用6800端口的情况下），这里提及的端口号对应配置文件中的端口号`rpc-listen-port`*
 
@@ -125,15 +123,15 @@ aria2c --conf-path /home/$LOGNAME/.aria2/aria2.conf
 
 ### 配置AriaNg
 
-配置好aria2 可是如果每次下载文件都去执行命令，虽然很hacker，但并不是我想要的。我们使用[AriaNg](https://github.com/mayswind/AriaNg)来操作aria2 ，AriaNg是一个基于Web的arai2 前端。可以在**github** 的**Release**页面中下载**AllInOne**版本。
+配置好aria2 可是如果每次下载文件都去执行命令，虽然很hacker，但并不是我想要的。我选择使用[AriaNg](https://github.com/mayswind/AriaNg)来操作aria2 ，AriaNg是一个基于Web的arai2 前端。可以在**github** 的**Release**页面中下载**AllInOne**版本。
 
 [AriaNg Github](https://github.com/mayswind/AriaNg)
 
-AllInOne 版本里面包含一个html文件，这就是我们要的，我们直接双击打开在浏览器中查看。
+AllInOne 版本里面包含一个html文件，这就是我要的，我们直接双击打开在浏览器中查看。
 
-当你看到左侧菜单栏最后一条有已连接的绿色标志，表示链接成功。如果一致显示未连接，那可能是配置出了问题，再去**配置aria2**仔细看看吧。
+当看到左侧菜单栏最后一条有已连接的绿色标志，表示链接成功。如果一致显示未连接，那可能是配置出了问题，应该仔细看看有没有正确**配置aria2**。
 
-到这时候，我们已经能愉快的使用aria2了，如果你和我一样还要更近一步的配置，请继续看下去。
+到这时候，我们已经能愉快的使用aria2了，但是，我还想完成两件事情。
 
 - 我希望把AriaNg部署成Web服务，而不是直接在本地去打开html文件（这很不酷）
 
@@ -175,7 +173,7 @@ app.listen(8081,()=>{
 });
 ```
 
-emmmm，现在还不能运行，需要装一下**express** 依赖包
+emmmm，现在还不能运行，需要装一下**express** 依赖包✔
 
 ```bash
 npm install express --save
@@ -189,13 +187,11 @@ node server.js
 
 
 
-*这几个命令都是在我们建立的目录下完成的*
+*这几个命令都是在最初建立的目录下完成的*
 
-当你看到终端输出`Server start !`，去浏览器输出http://localhost:8081，看是不是打开了AriaNg。
+当你看到终端输出`Server start !`，去浏览器输出http://localhost:8081，看是不是打开了AriaNg👌。
 
-现在我们打开了静态页服务，不过它还是在终端下执行的，关掉终端后，静态页服务也就关了。
-
-我们用Supervisor 进行守护
+现在打开了静态页服务，不过它还是在终端下执行的，关掉终端后，静态页服务也就关了。
 
 #### 用Supervisor守护进程
 
@@ -233,7 +229,7 @@ stdout_logfile=/var/log/ariaNg/out.log
 
 ##### 启动supervisor
 
-在启动supervisor前，我们可能需要建立ariaNg的日志目录
+在启动supervisor前，可能需要建立ariaNg的日志目录
 
 ```bash
 sudo mkdir /var/log/ariaNg
@@ -278,7 +274,7 @@ sudo supervisorctl status
 
 当所有一切都配置好后，我们只需要在浏览器中就能使用aria2 了，不过，我还希望它们能在开机时自动启动。
 
-### 在开机时就启动aria2
+### 开机自动启动aria2
 
 我可不想每次开机都要打开命令行然后输入命令去启动aria2
 
@@ -291,14 +287,14 @@ sudo service supervisor
 
 {% post_link 'WSL Service Autostart' %}
 
-配置好开机自启脚本后，我们只需要在init.wsl 中加入以下命令
+配置好开机自启脚本后，只需要在init.wsl 中加入以下命令
 
 ```bash
 /etc/init.d/supervisor $1
 aria2c --conf-path=/home/xiaosen/.aria2/aria2.conf
 ```
 
-搞定
+搞定👏👏👏
 
 
 
@@ -306,7 +302,7 @@ aria2c --conf-path=/home/xiaosen/.aria2/aria2.conf
 
 这大概就是我安装使用aria2 的整个过程了。
 
-*水平有限的很，如果某些地方不正确，恳请指出，感谢！*
+*水平有限，如果某些地方不正确，恳请斧正，感谢！*
 
 ### 参考
 

@@ -12,9 +12,7 @@ cover: https://cloud.zzserver.top/s/ojFWrYriHidHmwH/preview
 
 ## 前言
 
-要什么前言，直接开干吧😂。
-
-这里所有的步骤都写的比较详细，我把重要的地方标记了‘*’，如果没什么耐心的话，可以直接看标记的内容。
+捋起袖子，直接开干吧😂。
 
 ## 环境简介
 
@@ -38,21 +36,36 @@ Shell：Powershell
 
 ### 项目准备
 
+使用以下命令去创建以下项目。
+
 ```powershell
 mkdir PluginDemo
 cd PluginDemo
+
+# 保证使用的是2.2版本的.netcore sdk
+# 使用 dotnet --list-sdks 查看已安装的.netcore 版本
 dotnet new global.json --sdk-version 2.2.204
+
+# 创建项目
 dotnet new web -o Host
 dotnet new classlib -o Share
 dotnet new classlib -o Plugin1
 
+# 添加引用
 dotnet add .\Host\ reference .\Share\
 dotnet add .\Plugin1\ reference .\Share\
 
+# 在 VS Code 中打开
 code ./
 ```
 
 按下`F5`进行调试，保证项目成功启动。
+
+这里创建了三个项目，分别是**Host**、**Plugin1**、**Share**，依赖关系如下
+
+Host <- Share
+
+Plugin1 <- Share
 
 ### 数据库准备
 
@@ -64,7 +77,7 @@ code ./
 
 ### 加载Controller
 
-首先我想要做到的一点就是，把编写的程序集（其中包含继承自Controller的子类）丢到我们定义的插件目录，重启应用后，程序集中的Controller能够被成功路由。
+首先要做到的一点就是，把编写的程序集（其中包含继承自Controller的子类）丢到定义的插件目录，重启应用后，程序集中的Controller能够被成功路由。
 
 废话不多说，用**ApplicationPart**来实现这一点。
 
@@ -119,7 +132,7 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 
 '*.dll' 可以用如 *.plugin.dll 这样的字符串代替，取一个插件命名规则。最好把这个规则放在配置文件中。
 
-接下来编写一个Controller进行测试
+接下来编写一个Controller进行测试。
 
 ---
 
@@ -165,7 +178,7 @@ dotnet add .\Plugin1\ package Microsoft.AspNetCore.Mvc
 
 第一次`F5`调试的时候会配置构建任务生成该文件。
 
-**tasks.json**中默认添加了三个任务`build，publish，watch`，现在添加Plugin1的构建任务。
+**tasks.json**中默认添加了三个任务`build，publish，watch`，现在添加**Plugin1**的构建任务。
 
 编辑**tasks.json** 加入以下内容
 
@@ -207,21 +220,23 @@ dotnet add .\Plugin1\ package Microsoft.AspNetCore.Mvc
 
 `ctrl+shift+p`  输入 `run task` 选择 `build & install plugin1`
 
-*注意，第一次运行命令复制的文件是文件还是文件夹，在任务终端中，输入`F`确定是文件即可。*
+*注意，第一次运行命令可能会询问是复制的文件还是文件夹，在任务终端中，输入`F`确定是文件即可。*
 
-执行成功后在**Host**的`bin/Debug/netcoreapp2.2`目录下瞄一眼有没有Plugin1.dll，有的话就ok。
+执行成功后在**Host**的`bin/Debug/netcoreapp2.2`目录下瞄一眼有没有Plugin1.dll，有的话就👌。
+
+---
 
 #### 启动
 
 `F5`启动项目，然后在浏览器输入https://5001/api/plugin/ping。
 
-当看到浏览器回复了一个'pong' 之后，意味着，我们成功了😀。
+当看到浏览器回复了一个'pong' 之后，意味着，成功了😀。
 
 ### 注入Services
 
-Plugin1.dll 除了需要响应请求之外，我还希望它能使用IOC容器进行DI。.NetCore 已经内置了IOC容器，需要解决的问题就是：怎么把这个容器传递给插件🤔。这里使用反射来完成它。
+Plugin1.dll 除了需要响应请求之外，它还需要使用IOC容器进行DI。.NetCore 已经内置了IOC容器，需要解决的问题就是：怎么把这个容器传递给插件🤔。这里使用反射来完成它。
 
-思路是这样，定义一个用来注入服务的接口。在Host项目中，需要遍历所有实现了该接口的程序集并调用注入方法，然后在插件项目中实现该接口。当然，这个接口需要放在Share项目中。
+思路是这样，定义一个用来注入服务的接口。在**Host**项目中，需要遍历所有实现了该接口的程序集并调用注入方法，然后在插件项目中实现该接口。当然，这个接口需要放在**Share**项目中。
 
 #### 用来注入的接口*
 
@@ -251,7 +266,9 @@ dotnet add .\Share\ package Microsoft.Extensions.DependencyInjection
 
 *命令是在**PluginDemo** 路径下执行的，可不要混了。*
 
-这个接口极其简单，只有一个`RegisterServices`的方法，我这里保证这个接口有且只有这一个接口。
+这个接口极其简单，只有一个`RegisterServices`的方法，我这里保证这个接口有且只有这一个方法，方便待会能找到它。
+
+---
 
 #### 完成注入*
 
@@ -282,7 +299,7 @@ public void RegisterServices(IServiceCollection services)
         registers.ForEach(reg =>
         {
             var instance = Activator.CreateInstance(reg);
-            // 方法 保证该接口仅有一个方法。
+            // 方法 保证该接口仅有一个方法的情况下，使用SingleOrDefault，应该用Single。
             var method = typeof(IServicesRegister).GetMethods().SingleOrDefault();
             
             method.Invoke(instance, new object[]
@@ -295,6 +312,8 @@ public void RegisterServices(IServiceCollection services)
 
 ...
 ```
+
+---
 
 #### 编写Service进行测试
 
@@ -356,7 +375,7 @@ namespace Plugin1
 }
 ```
 
-最后修改**PluginController.cs** 添加注入和测试方法。
+最后修改**PluginController.cs** 添加AddService的注入依赖和测试方法。
 
 **PluginController.cs**
 
@@ -382,28 +401,32 @@ namespace Plugin1
 }
 ```
 
+---
+
 #### 启动
 
 先执行 `build & install plugin1`命令，然后`F5`启动。🚀
 
-一切完成，在浏览器地址栏输入https://localhost:5001/api/plugin/pingservice?a=service&b=done，看看浏览器响应，是否把'service' 和 'done' 拼到一起了呢。
+一切完成，在浏览器地址栏输入https://localhost:5001/api/plugin/pingservice?a=service&b=done。
+
+看看浏览器响应，是否把'service' 和 'done' 拼到一起了呢。
 
 再去调试控制台看看我们打印的`Debug.WriteLine("Register plugin1's services", "info: ");` 有没有正确输出。👏👏👏
 
 ### 独立配置文件
 
-当然希望插件能使用独立的配置文件，配置过程和普通的项目配置没有太大区别，这里就简单讲一下。
+当决定让插件成为一个完整独立的功能模块时，插件应该使用独立的配置文件，配置过程和普通的项目配置没有太大区别，这里就简单讲一下。
 
 项目 -- **Plugin1**
 
-需要添加2个文件
+添加以下两个文件
 
 - plugin1.json
 - Plugin1Config.cs
 
 #### **ServicesRegister.cs**中配Config*
 
-**ServicesRegister.cs** 中 方法  *RegisterServices*  如下
+修改**ServicesRegister.cs** 中 方法  *RegisterServices*  如下
 
 ```csharp
  public class ServicesRegister : IServicesRegister
@@ -474,7 +497,7 @@ namespace Plugin1
 
 
 
-想要成功构建Plugin1项目还需要添加以下NuGet包
+想要成功构建**Plugin1**项目还需要添加以下NuGet包
 
 - Microsoft.Extensions.Configuration
 - Microsoft.Extensions.Configuration.FileExtensions
@@ -541,11 +564,11 @@ namespace Plugin1
 dotnet add .\Plugin1\ package  Microsoft.Extensions.Options
 ```
 
-
+---
 
 #### 启动
 
-现在构建项目，先执行哪个命令我就不多说了。但是，在启动项目之前，把**Plugin1**的配置文件**plugin1.json**拷贝到**Host**目录下。
+现在像之前那样构建项目，在启动项目之前，把**Plugin1**的配置文件**plugin1.json**拷贝到**Host**目录下。
 
 ```csharp
 // 这里我配置的是当前目录
@@ -557,13 +580,13 @@ var config = new ConfigurationBuilder()
 
 
 
-启动之后，在浏览器地址栏输入https://localhost:5001/api/plugin/pingconfig，看看有没有正常读取到配置。
+启动之后，在浏览器地址栏输入https://localhost:5001/api/plugin/pingconfig。
 
-🙂
+看看有没有正常读取到配置。🙂
 
 ### 映射Model
 
-在插件中完成某些拓展功能时，可能需要数据库的表结构支持，但是，我不想把插件中的Model放到**Share**项目中，插件应该自己管理自己的Model。（究竟是放在Share中还是放在插件项目中，具体需要看插件的定位和需求）
+在插件中完成某些拓展功能时，可能需要数据库的表结构支持，但是，我不想把插件中的Model放到**Share**项目中，插件应该自己管理自己的Model。（究竟是放在Share中还是放在插件项目中，具体需要看插件的定位）
 
 需要准备一个数据库环境，我这里使用SQLite。
 
@@ -808,6 +831,6 @@ emmm，这次是完结了。
 1. Host项目功能完备，插件只是拓展功能。
 2. Host项目完全依赖插件实现功能
 
-混合使用这两种方式也好，单单只用其中一个方式也好。都没问题，具体取决于你。
+混合使用这两种方式也好，单单只用其中一个方式也好。都没问题，具体取决于键盘。
 
-完结👌
+完结👌。
