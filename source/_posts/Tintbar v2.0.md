@@ -29,13 +29,21 @@ cover: https://cloud.zzserver.top/s/sw5q5dwS4BX7cnr/preview
 
 下面欣赏一下船新的界面美图吧。
 
-[颜色设置 Light](https://cloud.zzserver.top/s/89ftcRAyPZRg2zF/preview)
+![Light](https://cloud.zzserver.top/s/y5Kb7qwgPg66rRm/preview)
 
-[沉浸设置 Dark](https://cloud.zzserver.top/s/89ftcRAyPZRg2zF/preview)
 
-[Light](https://cloud.zzserver.top/s/y5Kb7qwgPg66rRm/preview)
 
-[Dark](https://cloud.zzserver.top/s/GPtcdEs4yXZRceb/preview)
+![颜色设置 Light](https://cloud.zzserver.top/s/89ftcRAyPZRg2zF/preview)
+
+
+
+![Dark](https://cloud.zzserver.top/s/GPtcdEs4yXZRceb/preview)
+
+![沉浸设置 Dark](https://cloud.zzserver.top/s/Psx6GN96Pk5XRJn/preview)
+
+
+
+
 
 [Microsoft Store 链接](https://www.microsoft.com/zh-cn/p/tintbar/9n92l9qpv2rh)
 
