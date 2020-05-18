@@ -2,7 +2,7 @@
 title: .NetCore Web 项目的插件实现
 date: 
 categories:
-	- Web
+	- NetCore
 tags: 
 	- .NetCore
 	- C#

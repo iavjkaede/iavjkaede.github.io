@@ -27,6 +27,8 @@ cover: https://cloud.zzserver.top/s/sw5q5dwS4BX7cnr/preview
 - 新的沉浸策略
 - 更换图标颜色
 
+**遗憾的是，Microsoft Store 审核失败了目前。正式上线还需要一些时间。**
+
 下面欣赏一下船新的界面美图吧。
 
 ![Light](https://cloud.zzserver.top/s/y5Kb7qwgPg66rRm/preview)
