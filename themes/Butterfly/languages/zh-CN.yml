@@ -3,8 +3,8 @@ sidebar:
   have_read: 你已经读了
 
 footer:
-  driven: Power
-  theme: Theme
+  driven: 驱动
+  theme: 主题
 
 copy:
   success: 复制成功
@@ -19,7 +19,6 @@ page:
 
 sticky: 置顶
 no_title: 无题
-read_more: 阅读更多
 
 post:
   created: 发表于
@@ -27,11 +26,14 @@ post:
   wordcount: 字数总计
   min2read: "阅读时长: %s 分钟"
   page_pv: 阅读量
+  comments: 评论数
   copyright:
     author: 文章作者
     link: 文章链接
     copyright_notice: 版权声明
-    copyright_content: '本博客所有文章除特别声明外，均采用 <a href="%s">%s</a> 许可协议。转载请注明来自 <a href="%s">%s</a>！'
+    copyright_content: '本博客所有文章除特别声明外，均采用
+      <a href="%s" target="_blank">%s</a> 许可协议。转载请注明来自 <a href="%s" target="_blank">%s</a>！'
+  recommend: 相关推荐
 
 search: 搜索
 algolia_search:
@@ -51,7 +53,6 @@ pagination:
   next: 下一篇
 
 comment: 评论
-relatedPosts_headline: 相关推荐
 
 aside:
   articles: 文章
@@ -67,15 +68,15 @@ aside:
     headline: 网站资讯
     article_name: 文章数目
     runtime_name: 已运行时间
+    site_wordcount: 本站总字数
     site_uv_name: 本站访客数
     site_pv_name: 本站总访问量
+  more_button: 查看更多
 
 donate: 打赏
 share: 分享
 bookmark:
   title: 添加书签
-  message_prev: 按
-  message_next: 键将本页加入书签
 
 rightside:
   readmode_title: 阅读模式
@@ -83,5 +84,27 @@ rightside:
   font_minus_title: 缩小字体
   translate_title: 简繁转换
   night_mode_title: 夜间模式
+  back_to_top: 回到顶部
+  toc: 目录
+  scroll_to_comment: 直达评论
+  setting: 设置
 
 runtime_unit: 天
+
+copy_copyright:
+  author: 作者
+  link: 链接
+  source: 来源
+  info: 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+Snackbar:
+  bookmark:
+    message_prev: 按
+    message_next: 键将本页加入书签
+  chs_to_cht: 你已切换为繁体
+  cht_to_chs: 你已切换为简体
+  day_to_night: 你已切换为深色模式
+  night_to_day: 你已切换为浅色模式
+
+error_title: 页面没有找到
+loading: 加载中...

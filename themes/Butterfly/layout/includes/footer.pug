@@ -1,4 +1,4 @@
-#footer.layout
+#footer-wrap
   - var now = new Date()
   - var nowYear = now.getFullYear()
   if theme.since && theme.since != nowYear
@@ -8,7 +8,7 @@
   if theme.footer_copyright.enable
     .framework-info
       span= _p('footer.driven') + ' '
-      a(href='http://hexo.io')
+      a(href='https://hexo.io')
         span Hexo
       span.footer-separator |
       span= _p('footer.theme') + ' '
@@ -19,4 +19,6 @@
   if theme.ICP.enable
     .icp
       a(href=theme.ICP.url)
+        if theme.ICP.icon
+          img.icp-icon(src=url_for(theme.ICP.icon))
         span=theme.ICP.text

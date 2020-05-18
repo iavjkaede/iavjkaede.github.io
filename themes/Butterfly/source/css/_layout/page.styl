@@ -1,174 +1,182 @@
-galleryItemStyle(w, h)
-  .gallery
-    &-item
-      width: w
-      height: unit(h, "rem")
+.layout_page
+  display: flex
+  align-items: flex-start
+  margin: 0 auto
+  padding: 2rem 15px
+  max-width: 1200px
 
-      &__title
-        transform: translate3d(0, unit(h, "rem"), 0)
+// index
+#recent-posts
+  width: 75%
 
-      &:hover
-        .gallery-item__title
-          transform: translate3d(0, unit(h - 1.5, "rem"), 0)
+  & > .recent-post-item:not(:first-child)
+    margin-top: 1rem
 
-.recent-post-item
-  .content
-    margin-top: 0.5rem
-
-    p
-      word-break: break-word
-
-
-    ol,
-    ul
-      margin-top: 0.4rem
-      padding: 0 0 0 0.8rem
-      list-style: none
-      counter-reset: li
-
-      p
-        margin: 0
-
-      ol,
-      ul
-        padding-left: 0.5rem
-
-      li
-        position: relative
-        margin: 0.2rem 0
-        padding: 0.1rem 0.5rem 0.1rem 1.5rem
-
-        &:hover
-          &:before
-            transform: rotate(360deg)
-
-        &:before
-          position: absolute
-          top: 0
-          left: 0
-          background: $light-blue
-          color: $white
-          cursor: pointer
-          transition: all 0.3s ease-out
-
-    ol
-      li
-        &:before
-          margin-top: 0.2rem
-          width: w = 1.2rem
-          height: h = w
-          border-radius: 0.5 * w
-          content: counter(li)
-          counter-increment: li
-          text-align: center
-          font-size: 0.6rem
-          line-height: h
-
-    ul
-      li
-        &:hover
-          &:before
-            border-color: $ruby
-
-        &:before
-          $w = 0.3rem
-          top: 10px
-          margin-left: 0.45rem
-          width: w = $w
-          height: h = w
-          border: 0.5 * w solid $light-blue
-          border-radius: w
-          background: $white
-          content: ""
-          line-height: h
-
-  .article-type
-    margin-left: 0.3rem
-    color: $grey
-
-  .article-meta
-    color: $grey
-
-    .sticky
-      color: $theme-button-hover-color
-
-    i
-      margin: 0 0.2rem 0 0.3rem
-
-    &__separator
-      margin-left: 0.3rem
-
-    .fa-angle-right,
-    &__link
-      margin: 0 0 0 0.3rem
-
-  time
-    color: $grey
-  
-  .more_setting
-    display: none
-
-  .more
-    display: inline-block
-    padding: 0 1rem
-    height: h = 1.6rem
-    // background: $light-blue
-    // color: $white
-    text-align: center
-    text-decoration: none
-    line-height: h
-    cursor: pointer
-    // transition: all 0.2s ease-in-out
-
-    // &:hover
-    //   background: $ruby
-
-  .article-title
-    margin-bottom: 0.3rem
-    color: $black
-    text-decoration: none
-    font-size: 1.2rem
-    cursor: pointer
-    transition: all 0.2s ease-in-out
-    line-height: 1.4
-    text-overflow: ellipsis
-    display: -webkit-box
-    -webkit-box-orient: vertical
-    -webkit-line-clamp: 2
-    overflow: hidden
-    word-wrap: break-word
+  & > .recent-post-item
+    display: flex
+    flex-direction: row
+    align-items: center
+    padding: 0
+    height: 280px
+    border-radius: 8px
+    background: $card-bg
+    box-shadow: 0 4px 8px 6px rgba(7, 17, 27, .06)
+    transition: all .3s
 
     &:hover
-      // border-bottom: 1px solid $light-blue
-      color: $light-blue !important
+      box-shadow: 0 4px 12px 12px rgba(7, 17, 27, .15)
 
+      img.post_bg
+        transform: scale(1.1)
+
+    if hexo-config('cover.position') == 'both'
+      .left_radius
+        border-radius: 8px 0 0 8px
+
+      .right_radius
+        order: 2
+        border-radius: 0 8px 8px 0
+    else if hexo-config('cover.position') == 'left'
+      .left_radius
+        border-radius: 8px 0 0 8px
+
+      .right_radius
+        border-radius: 8px 0 0 8px
+    else if hexo-config('cover.position') == 'right'
+      .left_radius
+        order: 2
+        border-radius: 0 8px 8px 0
+
+      .right_radius
+        order: 2
+        border-radius: 0 8px 8px 0
+
+    .post_cover
+      overflow: hidden
+      width: 45%
+      height: 280px
+      -webkit-mask-image: -webkit-radial-gradient(white, black)
+
+      img.post_bg
+        display: block
+        margin: 0
+        padding: 0
+        width: 100%
+        height: 100%
+        border: 0
+        transition: all .6s
+        object-fit: cover
+
+        &:hover
+          transform: scale(1.1)
+
+    & >.recent-post-info
+      display: inline-block
+      overflow: hidden
+      padding: 0 40px
+      width: 55%
+
+      &.no-cover
+        width: 100%
+
+      & > .article-title
+        display: -webkit-box
+        overflow: hidden
+        margin-bottom: .3rem
+        color: $font-black
+        text-overflow: ellipsis
+        word-wrap: break-word
+        font-size: 1.2rem
+        line-height: 1.4
+        transition: all .2s ease-in-out
+        -webkit-box-orient: vertical
+        -webkit-line-clamp: 2
+
+        &:hover
+          color: $light-blue !important
+
+      & > .article-meta-wrap
+        font-size: 95%
+
+        & > time
+          color: $theme-meta-color
+          cursor: pointer
+
+        & > .article-meta
+          color: $theme-meta-color
+
+        .sticky
+          color: $sticky-color
+
+        i
+          margin: 0 .2rem 0 0
+
+        .article-meta__separator,
+        .article-meta__link
+          margin: 0 .3rem
+
+        .fa-angle-right
+          margin: 0 .3rem
+
+        a.article-meta__categories,
+        a.article-meta__tags
+          color: $theme-meta-color
+
+          &:hover
+            color: $light-blue !important
+            text-decoration: underline
+
+      & > .content
+        display: -webkit-box
+        overflow: hidden
+        margin-top: .3rem
+        // height: 85px
+        word-break: break-word
+        -webkit-line-clamp: 3
+        -webkit-box-orient: vertical
+
+// tags page
 .tag-cloud
-  padding: 1.5rem 1rem 2rem
-  text-align: center
-
   a
     display: inline-block
-    margin: 0 0.4rem
-    text-decoration: none
+    padding: 0 .4rem
     cursor: pointer
+    transition: all .3s
 
     &:hover
-      color: $ruby !important
+      color: $theme-button-hover-color !important
+      transform: scale(1.1)
 
   &__title
+    text-align: center
     font-size: 1.8rem
 
-#tag,
-#category,
-#archive
-  padding: 3rem 3rem 3rem
+  &-tags
+    text-align: center
+
+.layout_post > #post,
+.layout_page > div:first-child:not(.recent-posts)
+  padding: 50px 40px
+  border-radius: 8px
+  background: $card-bg
+  box-shadow: 0 4px 8px 6px rgba(7, 17, 27, .06)
+  transition: all .3s
+
+  &:hover
+    box-shadow: 0 4px 12px 12px rgba(7, 17, 27, .15)
+
+.layout_page
+  & > div:first-child:not(.recent-posts)
+    width: 75%
 
 .article-sort
+  margin-left: .5rem
   padding-left: 1rem
-  border-left: 2px solid $pale-blue
+  border-left: 2px solid lighten($light-blue, 20)
 
   &-title
     position: relative
+    margin-left: .5rem
     padding-bottom: 1.2rem
     padding-left: 1rem
     font-size: 1.2rem
@@ -176,56 +184,68 @@ galleryItemStyle(w, h)
 
     &:hover
       &:before
-        border-color: $ruby
+        border-color: $theme-button-hover-color
 
     &:before
       position: absolute
-      top: 0.25rem
-      left: calc(-0.5rem + 1px)
+      top: .25rem
+      left: calc(-.5rem + 1px)
       z-index: 1
-      width: w = 0.5rem
+      width: w = .5rem
       height: h = w
-      border: 0.5 * w solid $light-blue
+      border: .5 * w solid $light-blue
       border-radius: w
-      background: $white
-      content: ""
+      background: $card-bg
+      content: ''
       line-height: h
-      transition: all 0.2s ease-in-out
+      transition: all .2s ease-in-out
 
     &:after
       position: absolute
       bottom: 0
       left: 0
       z-index: 0
-      width: 0.1rem
+      width: .1rem
       height: 1.3rem
-      background: $pale-blue
-      content: ""
+      background: lighten($light-blue, 20)
+      content: ''
 
   &-item
     position: relative
-    margin-bottom: 1rem
-    transition: all 0.2s ease-in-out
+    margin: 0 0 1rem .5rem
+    width: 100%
+    height: 80px
+    transition: all .2s ease-in-out
 
     &:hover
       &:before
-        border-color: $ruby
+        border-color: $theme-button-hover-color
 
     &:before
-      $w = 0.3rem
+      $w = .3rem
       position: absolute
-      top: 0.48rem
-      left: calc(-1rem - 7px)
+      top: 1.8rem
+      left: calc(-1rem - 17px)
       width: w = $w
       height: h = w
-      border: 0.5 * w solid $light-blue
+      border: .5 * w solid $light-blue
       border-radius: w
-      background: $white
-      content: ""
+      background: $card-bg
+      content: ''
       line-height: h
-      transition: all 0.2s ease-in-out
+      transition: all .2s ease-in-out
+
+    &.no-article-cover
+      display: flex
+      flex-direction: column
+      justify-content: center
+
+      .article-sort-post
+        padding: 0
+        width: 100%
 
     &.year
+      height: auto
       font-size: 1rem
 
       &:hover
@@ -233,21 +253,53 @@ galleryItemStyle(w, h)
           border-color: $light-blue
 
       &:before
-        top: 0.7rem
-        border-color: $ruby
+        top: .7rem
+        border-color: $theme-button-hover-color
 
     &__time
-      position: absolute
-      top: 0.1rem
-      color: $a-link-color
+      padding-left: .4rem
+      font-size: .7rem
 
     &__title
-      display: block
-      margin-left: 5rem
+      display: -webkit-box
+      overflow: hidden
       color: $font-black
-      text-decoration: none
-      font-size: 0.8rem
-      cursor: pointer
+      font-size: .75rem
+      transition: all .3s
+      -webkit-line-clamp: 2
+      -webkit-box-orient: vertical
+
+      &:hover
+        color: $light-blue !important
+        transform: translateX(20px)
+
+    &__img
+      img
+        padding: 0
+        width: 100%
+        height: 100%
+        transition: all .6s
+        object-fit: cover
+
+        &:hover
+          transform: scale(1.1)
+
+    &__post
+      color: $theme-meta-color
+
+      &:hover
+        color: $theme-meta-color
+
+  &-img
+    float: left
+    overflow: hidden
+    width: 80px
+    height: 80px
+
+  &-post
+    display: inline-block
+    padding: 0 1rem
+    width: calc(100% - 80px)
 
 .category-lists
   padding: 1rem 0 1.5rem
@@ -259,61 +311,78 @@ galleryItemStyle(w, h)
 .category-list
   a
     color: $font-black
-    text-decoration: none
     cursor: pointer
 
   .category-list-count
-    margin-left: 0.4rem
-    color: $a-link-color
+    margin-left: .4rem
+    color: $theme-meta-color
 
     &:before
-      content: "("
+      content: '('
 
     &:after
-      content: ")"
+      content: ')'
 
-.gallery
-  &-item
-    position: relative
-    display: inline-block
-    overflow: hidden
-    margin: 0.4rem
-    width: 6rem
-    height: 6rem
-    background-position: 50% 50%
-    background-size: cover
-    background-repeat: no-repeat
-    cursor: pointer
-    transition: all 0.2s ease-in-out
+// 隱藏aside
+.hide-aside
+  max-width: 1000px
 
-    &__title
-      position: absolute
-      overflow: hidden
-      padding: 0 0.4rem
-      width: 100%
-      height: 1.5rem
-      background: rgba(0, 0, 0, 0.5)
-      color: $pale-blue
-      text-align: center
-      text-overflow: ellipsis
-      white-space: nowrap
-      line-height: 1.5rem
-      transition: 0.2s ease-in-out
-      transform: translate3d(0, 6rem, 0)
-
-    &:hover
-      .gallery-item__title
-        transform: translate3d(0, 4.5rem, 0)
+  & > div
+    width: 100% !important
 
 @media screen and (max-width: $sm)
-  .recent-post-item
-    .article-title
-      font-size: 1rem
+  .layout_page
+    padding: 1rem 5px !important
 
-    .article-meta.tags
-      display: none
+    & > div:first-child:not(.recent-posts)
+      padding: 1.8rem .7rem
 
-  galleryItemStyle(calc(50% - 22px), 6)
+  .category-lists
+    padding: 0
 
-@media screen and (min-width: $md)
-  galleryItemStyle(8rem, 8)
+  #recent-posts
+    .recent-post-item
+      flex-direction: column
+      height: auto !important
+
+      .post_cover
+        order: 1 !important
+        width: 100%
+        height: 230px
+        border-radius: 8px 8px 0 0
+
+      .recent-post-info
+        order: 2 !important
+        padding: 1rem 1rem 1.5rem
+        width: 100%
+
+        &.no-cover
+          padding: 1.5rem 1rem
+
+        .article-title
+          font-size: 1rem
+
+        .content
+          height: auto
+
+@media screen and (min-width: 900px)
+  if hexo-config('aside.position') == 'left'
+    #recent-posts,
+    #page,
+    .category-content,
+    #archive,
+    .tag-cloud,
+    #tag,
+    #category
+      order: 2
+
+@media screen and (max-width: 900px)
+  .layout_page
+    & > div:first-child:not(.recent-posts)
+      width: 100% !important
+
+// ie10-ios11使用
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active)
+  .recent-post-info
+    .content
+      height: 90px
