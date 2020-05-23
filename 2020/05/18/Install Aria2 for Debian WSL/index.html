@@ -1,0 +1,197 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Linux子系统（WSL）Debian安装aria2并配置AriaNg | 归云阁</title><meta name="description" content="环境简介系统环境Window 10 LTSC 2019  开启WSL WSL 使用 Debian 发行版 Shell 环境ZSH 将安装的软件版本aria2    版本 1.30.0 AriaNg 版本 1.1.1 开始安装aria2首先进行aria2 的安装 1sudo apt install aria2  安装完成输入以下命令查看安装是否成功 1aria2c --version  成功输出版本"><meta name="keywords" content="WSL,Aria2,Debian"><meta name="author" content="潇枫11"><meta name="copyright" content="潇枫11"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.png"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="dns-prefetch" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="crossorigin"/><link rel="dns-prefetch" href="https://fonts.googleapis.com"/><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Linux子系统（WSL）Debian安装aria2并配置AriaNg"><meta name="twitter:description" content="环境简介系统环境Window 10 LTSC 2019  开启WSL WSL 使用 Debian 发行版 Shell 环境ZSH 将安装的软件版本aria2    版本 1.30.0 AriaNg 版本 1.1.1 开始安装aria2首先进行aria2 的安装 1sudo apt install aria2  安装完成输入以下命令查看安装是否成功 1aria2c --version  成功输出版本"><meta name="twitter:image" content="https://image.zsver.com/2020/05/23/ff71252584474.jpg"><meta property="og:type" content="article"><meta property="og:title" content="Linux子系统（WSL）Debian安装aria2并配置AriaNg"><meta property="og:url" content="http://blog.forestsen.com/2020/05/18/Install%20Aria2%20for%20Debian%20WSL/"><meta property="og:site_name" content="归云阁"><meta property="og:description" content="环境简介系统环境Window 10 LTSC 2019  开启WSL WSL 使用 Debian 发行版 Shell 环境ZSH 将安装的软件版本aria2    版本 1.30.0 AriaNg 版本 1.1.1 开始安装aria2首先进行aria2 的安装 1sudo apt install aria2  安装完成输入以下命令查看安装是否成功 1aria2c --version  成功输出版本"><meta property="og:image" content="https://image.zsver.com/2020/05/23/ff71252584474.jpg"><meta property="article:published_time" content="2020-05-18T15:22:37.125Z"><meta property="article:modified_time" content="2020-05-23T08:51:57.344Z"><script src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js"></script><script>var autoChangeMode = '1'
+var t = Cookies.get("theme")
+if (autoChangeMode == '1'){
+  var isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
+  var isLightMode = window.matchMedia("(prefers-color-scheme: light)").matches
+  var isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined){
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport){
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour < 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+  }
+  } else if (t == 'light') activateLightMode()
+  else activateDarkMode()
+
+} else if (autoChangeMode == '2'){
+  now = new Date();
+  hour = now.getHours();
+  isNight = hour < 6 || hour >= 18
+  if(t === undefined) isNight? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode() 
+} else {
+  if ( t == 'dark' ) activateDarkMode()
+  else if ( t == 'light') activateLightMode()
+}
+
+function activateDarkMode(){
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+    document.querySelector('meta[name="theme-color"]').setAttribute('content','#000')
+  }
+}
+function activateLightMode(){
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+  document.querySelector('meta[name="theme-color"]').setAttribute('content','#fff')
+  }
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="canonical" href="http://blog.forestsen.com/2020/05/18/Install%20Aria2%20for%20Debian%20WSL/"><link rel="next" title="Linux子系统（WSL）Debian安装Nodejs" href="http://blog.forestsen.com/2020/05/18/Install%20nodejs%20for%20Debian%20WSL/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  bookmark: {
+    message_prev: '按',
+    message_next: '键将本页加入书签'
+  },
+  runtime_unit: '天',
+  runtime: false,
+  copyright: undefined,
+  ClickShowText: undefined,
+  medium_zoom: true,
+  fancybox: true,
+  Snackbar: undefined,
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  highlightShrink: 'false',
+  isFontAwesomeV5: false,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+  
+}</script><script>var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isSidebar: true  
+  }</script><noscript><style>
+#page-header {
+  opacity: 1
+}
+.justified-gallery img{
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="归云阁" type="application/atom+xml">
+</head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">8</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">13</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">2</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 归云</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 御风</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 忘尘</span></a></div></div></div></div><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true">     </i><div id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#环境简介"><span class="toc-number">1.</span> <span class="toc-text">环境简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#系统环境"><span class="toc-number">1.1.</span> <span class="toc-text">系统环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Shell-环境"><span class="toc-number">1.2.</span> <span class="toc-text">Shell 环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#将安装的软件版本"><span class="toc-number">1.3.</span> <span class="toc-text">将安装的软件版本</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开始"><span class="toc-number">2.</span> <span class="toc-text">开始</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装aria2"><span class="toc-number">2.1.</span> <span class="toc-text">安装aria2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置aria2"><span class="toc-number">2.2.</span> <span class="toc-text">配置aria2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置AriaNg"><span class="toc-number">2.3.</span> <span class="toc-text">配置AriaNg</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#配置静态文件服务"><span class="toc-number">2.3.1.</span> <span class="toc-text">配置静态文件服务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#用Supervisor守护进程"><span class="toc-number">2.3.2.</span> <span class="toc-text">用Supervisor守护进程</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#建立ariaNg-的supervisor配置文件"><span class="toc-number">2.3.2.1.</span> <span class="toc-text">建立ariaNg 的supervisor配置文件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#启动supervisor"><span class="toc-number">2.3.2.2.</span> <span class="toc-text">启动supervisor</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开机自动启动aria2"><span class="toc-number">2.4.</span> <span class="toc-text">开机自动启动aria2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#最后"><span class="toc-number">2.5.</span> <span class="toc-text">最后</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考"><span class="toc-number">2.6.</span> <span class="toc-text">参考</span></a></li></ol></li></ol></div></div></div><div id="body-wrap"><div class="post-bg" id="nav" style="background-image: url(https://image.zsver.com/2020/05/23/ff71252584474.jpg)"><div id="page-header"><span class="pull_left" id="blog_name"><a class="blog_title" id="site-name" href="/">归云阁</a></span><span class="pull_right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 归云</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 御风</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 忘尘</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fa fa-bars fa-fw" aria-hidden="true"></i></a></span></span></div><div id="post-info"><div id="post-title"><div class="posttitle">Linux子系统（WSL）Debian安装aria2并配置AriaNg</div></div><div id="post-meta"><div class="meta-firstline"><time class="post-meta__date"><span class="post-meta__date-created" title="发表于 2020-05-18 23:22:37"><i class="fa fa-calendar" aria-hidden="true"></i> 发表于 2020-05-18</span><span class="post-meta__separator">|</span><span class="post-meta__date-updated" title="更新于 2020-05-23 16:51:57"><i class="fa fa-history" aria-hidden="true"></i> 更新于 2020-05-23</span></time><span class="post-meta__categories"><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/Deploy/">Deploy</a></span></div><div class="meta-secondline"> </div><div class="meta-thirdline"><span class="post-meta-pv-cv"></span><span class="post-meta-commentcount"></span></div></div></div></div><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h2 id="环境简介"><a href="#环境简介" class="headerlink" title="环境简介"></a>环境简介</h2><h3 id="系统环境"><a href="#系统环境" class="headerlink" title="系统环境"></a>系统环境</h3><p>Window 10 LTSC 2019  <strong>开启WSL</strong></p>
+<p>WSL 使用 <strong>Debian 发行版</strong></p>
+<h3 id="Shell-环境"><a href="#Shell-环境" class="headerlink" title="Shell 环境"></a>Shell 环境</h3><p>ZSH</p>
+<h3 id="将安装的软件版本"><a href="#将安装的软件版本" class="headerlink" title="将安装的软件版本"></a>将安装的软件版本</h3><p>aria2    版本 <strong>1.30.0</strong></p>
+<p>AriaNg 版本 <strong>1.1.1</strong></p>
+<h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><h3 id="安装aria2"><a href="#安装aria2" class="headerlink" title="安装aria2"></a>安装aria2</h3><p>首先进行<a href="https://github.com/aria2/aria2" target="_blank" rel="noopener">aria2</a> 的安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install aria2</span><br></pre></td></tr></table></figure>
+
+<p>安装完成输入以下命令查看安装是否成功</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aria2c --version</span><br></pre></td></tr></table></figure>
+
+<p>成功输出版本信息后，安装就完成了</p>
+<h3 id="配置aria2"><a href="#配置aria2" class="headerlink" title="配置aria2"></a>配置aria2</h3><p><span id="aria2_conf">配置aria2</span></p>
+<p>安装是很简单，配置aria2 却是有些棘手的，当然不进行配置也是可以使用的，这里不过多介绍，讲一下我自己的配置。</p>
+<p>需要创建三个文件，分别用来保存aria2 的配置、会话和日志。</p>
+<p>我这里在用户目录下建立文件夹，其实可以将配置目录放在Windows目录下，这样重新安装</p>
+<p>WSL的时候就无需重新创建编写配置文件了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> </span><br><span class="line">mkdir .aria2</span><br><span class="line"><span class="built_in">cd</span> .aria2</span><br><span class="line">touch aria2.conf</span><br><span class="line">touch aria2.session</span><br><span class="line">touch aria2.log</span><br></pre></td></tr></table></figure>
+
+<p>完成后进行aria2 的配置，这里只记录我自己的配置，详细配置自行搜索查阅。</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Log Options</span></span><br><span class="line"></span><br><span class="line"><span class="attr">log-level</span>=warn</span><br><span class="line"><span class="attr">log</span>=/home/<span class="variable">$LOGNAME</span>/.aria2/aria2.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># Running on background</span></span><br><span class="line"><span class="attr">daemon</span>=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Download path</span></span><br><span class="line"><span class="comment"># 下载地址，可以放在Windows系统的目录下，比如以下是E盘的download</span></span><br><span class="line"><span class="attr">dir</span>=/mnt/e/Download</span><br><span class="line"></span><br><span class="line"><span class="comment"># Session Options</span></span><br><span class="line"><span class="attr">input-file</span>=/home/<span class="variable">$LOGNAME</span>/.aria2/aria2.session</span><br><span class="line"><span class="attr">save-session</span>=/home/<span class="variable">$LOGNAME</span>/.aria2/aria2.session</span><br><span class="line"><span class="attr">save-session-interval</span>=<span class="number">30</span></span><br><span class="line"></span><br><span class="line"><span class="attr">continue</span>=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Disk cache</span></span><br><span class="line"><span class="attr">disk-cache</span>=<span class="number">32</span>M</span><br><span class="line"></span><br><span class="line"><span class="comment"># RPC Options</span></span><br><span class="line"><span class="comment"># 因为只在本地使用，不用rpc安全设置也可以</span></span><br><span class="line"><span class="attr">enable-rpc</span>=<span class="literal">true</span></span><br><span class="line"><span class="attr">rpc-allow-origin-all</span>=<span class="literal">true</span></span><br><span class="line"><span class="attr">rpc-listen-port</span>=<span class="number">6800</span>	</span><br><span class="line"></span><br><span class="line"><span class="comment"># 其他更详细的配置自行查阅吧，或者待会我们配置AriaNg就可以具体看可以配置哪些内容了</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>$LOGNAME</strong> 替换成你用户名</p>
+<p>使用配置文件启动 aria2</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aria2c --conf-path /home/<span class="variable">$LOGNAME</span>/.aria2/aria2.conf</span><br></pre></td></tr></table></figure>
+
+<p><em>配置这个地方可能会有坑，如果配置文件写错了，这个命令可能没有任何报错就退出了，或者rpc没有成功开启。执行完这条命令后，在浏览器地址栏输入<a href="http://localhost:6800" target="_blank" rel="noopener">http://localhost:6800</a></em></p>
+<p><em>如果出现404而不是未响应，说明rpc是正常开启了的（在没有其他进程占用6800端口的情况下），这里提及的端口号对应配置文件中的端口号<code>rpc-listen-port</code></em></p>
+<p>另外，我不知道aria2 有没有检查配置文件的命令，我是用笨方法排除错误，把配置文件的<code>daemon=true</code> 去掉然后使用配置文件启动aria2c，会提示错误信息的。如果没有提示，可以先把不重要的配置注释掉再次启动，rpc是一定要开启的，其他配置对我来说比较次要。</p>
+<h3 id="配置AriaNg"><a href="#配置AriaNg" class="headerlink" title="配置AriaNg"></a>配置AriaNg</h3><p>配置好aria2 可是如果每次下载文件都去执行命令，虽然很hacker，但并不是我想要的。我选择使用<a href="https://github.com/mayswind/AriaNg" target="_blank" rel="noopener">AriaNg</a>来操作aria2 ，AriaNg是一个基于Web的arai2 前端。可以在<strong>github</strong> 的<strong>Release</strong>页面中下载<strong>AllInOne</strong>版本。</p>
+<p><a href="https://github.com/mayswind/AriaNg" target="_blank" rel="noopener">AriaNg Github</a></p>
+<p>AllInOne 版本里面包含一个html文件，这就是我要的，我们直接双击打开在浏览器中查看。</p>
+<p>当看到左侧菜单栏最后一条有已连接的绿色标志，表示链接成功。如果一致显示未连接，那可能是配置出了问题，应该仔细看看有没有正确<strong>配置aria2</strong>。</p>
+<p>到这时候，我们已经能愉快的使用aria2了，但是，我还想完成两件事情。</p>
+<ul>
+<li><p>我希望把AriaNg部署成Web服务，而不是直接在本地去打开html文件（这很不酷）</p>
+</li>
+<li><p>我希望每次开机的时候自动启动aria2c</p>
+</li>
+</ul>
+<h4 id="配置静态文件服务"><a href="#配置静态文件服务" class="headerlink" title="配置静态文件服务"></a>配置静态文件服务</h4><p>这里我将使用Nodejs来实现。</p>
+<p>有关如何在WSL中安装Nodejs，请参考 <a href="/2020/05/18/Install%20nodejs%20for%20Debian%20WSL/" title="Linux子系统（WSL）Debian安装Nodejs">Linux子系统（WSL）Debian安装Nodejs</a></p>
+<p>安装好Nodejs 后，确定一下npm 命令。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm --version</span><br></pre></td></tr></table></figure>
+
+<p>我们<strong>建立一个目录存放静态页，将AriaNg（Index.html)文件放在该目录下，并cd 到该目录</strong></p>
+<p>建立一个用于支持web服务的js文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">touch server.js</span><br></pre></td></tr></table></figure>
+
+<p>编辑该文件输入以下内容并保存。</p>
+<p><strong>server.js</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> express = <span class="built_in">require</span>(<span class="string">"express"</span>);</span><br><span class="line"><span class="keyword">let</span> app = express();</span><br><span class="line"></span><br><span class="line">app.use(express.static(<span class="string">"./"</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 端口号自行配置</span></span><br><span class="line">app.listen(<span class="number">8081</span>,()=&gt;&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'Server start !'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>emmmm，现在还不能运行，需要装一下<strong>express</strong> 依赖包✔</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install express --save</span><br></pre></td></tr></table></figure>
+
+<p>启动服务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node server.js</span><br></pre></td></tr></table></figure>
+
+
+
+<p><em>这几个命令都是在最初建立的目录下完成的</em></p>
+<p>当你看到终端输出<code>Server start !</code>，去浏览器输出<a href="http://localhost:8081，看是不是打开了AriaNg👌。">http://localhost:8081，看是不是打开了AriaNg👌。</a></p>
+<p>现在打开了静态页服务，不过它还是在终端下执行的，关掉终端后，静态页服务也就关了。</p>
+<h4 id="用Supervisor守护进程"><a href="#用Supervisor守护进程" class="headerlink" title="用Supervisor守护进程"></a>用Supervisor守护进程</h4><p>首先安装Supervisor</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install supervisor</span><br></pre></td></tr></table></figure>
+
+<p>在我使用的debian中，安装后会在 <code>/etc/supervisor</code> 生成一个<strong>supervisord.conf</strong>文件和一个<strong>conf.d</strong>目录，我们可以在conf.d目录中建立配置。supervisord.conf文件中已经包含了它。<em>不能保证使用的环境都是一样的，这里只是我自己的环境。</em></p>
+<h5 id="建立ariaNg-的supervisor配置文件"><a href="#建立ariaNg-的supervisor配置文件" class="headerlink" title="建立ariaNg 的supervisor配置文件"></a>建立ariaNg 的supervisor配置文件</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /etc/supervisor/conf.d</span><br><span class="line">sudo vi ariaNg.conf</span><br></pre></td></tr></table></figure>
+
+<p>配置文件内容如下</p>
+<p><strong>ariaNg.conf</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[program:ariaNg]</span></span><br><span class="line"><span class="attr">command</span>=node server.js</span><br><span class="line"><span class="attr">directory</span>=/home/ariaNg	<span class="comment">#配置静态页的目录</span></span><br><span class="line"><span class="attr">user</span>=root</span><br><span class="line"><span class="attr">autorestart</span>=<span class="literal">true</span></span><br><span class="line"><span class="attr">stderr_logfile</span>=/var/log/ariaNg/err.log</span><br><span class="line"><span class="attr">stdout_logfile</span>=/var/log/ariaNg/out.log</span><br></pre></td></tr></table></figure>
+
+<h5 id="启动supervisor"><a href="#启动supervisor" class="headerlink" title="启动supervisor"></a>启动supervisor</h5><p>在启动supervisor前，可能需要建立ariaNg的日志目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir /var/<span class="built_in">log</span>/ariaNg</span><br></pre></td></tr></table></figure>
+
+
+
+<p>启动supervisor服务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service supervisor start</span><br></pre></td></tr></table></figure>
+
+<p>查看下运行状态</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo supervisorctl status</span><br></pre></td></tr></table></figure>
+
+<p>看到<code>aria2Ng                          RUNNING</code> 然后去浏览器访问一下确定是否成功。</p>
+<p>使用supervisorctl 的过程中可能会报<strong>unix:///var/run/supervisor.sock no such file</strong>这个错误。不要慌。</p>
+<p>可以先看一下ariaNg 的log文件，看看是哪个地方出了问题。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /var/<span class="built_in">log</span>/ariaNg/err.log</span><br></pre></td></tr></table></figure>
+
+<p>如果是配置的问题，就去修改配置文件。</p>
+<p>然后停止supervisor 服务，再次启动。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo service supervisor stop</span><br><span class="line">sudo service supervisor start</span><br><span class="line"></span><br><span class="line">sudo supervisorctl status</span><br></pre></td></tr></table></figure>
+
+<p>我当时直接重装了supervisor，因为刚开始没卸载干净，还重装了好几遍，😂。</p>
+<p>当所有一切都配置好后，我们只需要在浏览器中就能使用aria2 了，不过，我还希望它们能在开机时自动启动。</p>
+<h3 id="开机自动启动aria2"><a href="#开机自动启动aria2" class="headerlink" title="开机自动启动aria2"></a>开机自动启动aria2</h3><p>我可不想每次开机都要打开命令行然后输入命令去启动aria2</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">aria2c --conf-path /home/<span class="variable">$LOGNAME</span>/.aria2/aria2.conf</span><br><span class="line">sudo service supervisor</span><br></pre></td></tr></table></figure>
+
+<p>废话少说，有关如何设置在WSL中开机自动启动服务的方法先去这看一下吧。</p>
+<a href="/2019/03/02/WSL%20Service%20Autostart/" title="Linux子系统(WSL)中的服务开机启动">Linux子系统(WSL)中的服务开机启动</a>
+
+<p>配置好开机自启脚本后，只需要在init.wsl 中加入以下命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/supervisor <span class="variable">$1</span></span><br><span class="line">aria2c --conf-path=/home/xiaosen/.aria2/aria2.conf</span><br></pre></td></tr></table></figure>
+
+<p>搞定👏👏👏</p>
+<h3 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h3><p>这大概就是我安装使用aria2 的整个过程了。</p>
+<p><em>水平有限，如果某些地方不正确，恳请斧正，感谢！</em></p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="https://www.jianshu.com/p/6adf79d29add" target="_blank" rel="noopener">Aria2 配置详解</a></p>
+<p><a href="https://blog.csdn.net/wenwushq/article/details/79827718" target="_blank" rel="noopener">用nodejs搭建静态网页服务器居然这么简单</a></p>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">潇枫11</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://blog.forestsen.com/2020/05/18/Install%20Aria2%20for%20Debian%20WSL/">http://blog.forestsen.com/2020/05/18/Install%20Aria2%20for%20Debian%20WSL/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://blog.forestsen.com" target="_blank">归云阁</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/WSL/">WSL</a><a class="post-meta__tags" href="/tags/Aria2/">Aria2</a><a class="post-meta__tags" href="/tags/Debian/">Debian</a></div><div class="post_share"><div class="social-share" data-image="https://image.zsver.com/2020/05/23/ff71252584474.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"/><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js"></script></div></div><nav class="pagination_post" id="pagination"><div class="next-post pull-full"><a href="/2020/05/18/Install%20nodejs%20for%20Debian%20WSL/"><img class="next_cover" data-src="https://image.zsver.com/2020/05/23/9c88d021ce36d.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Linux子系统（WSL）Debian安装Nodejs</div></div></a></div></nav></article></main><footer id="footer" style="background-image: url(https://image.zsver.com/2020/05/23/ff71252584474.jpg)" data-type="photo"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2020 By 潇枫11</div><div class="framework-info"><span>Power by </span><a href="https://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><i class="fa fa-book" id="readmode" title="阅读模式"></i><i class="fa fa-plus" id="font_plus" title="放大字体"></i><i class="fa fa-minus" id="font_minus" title="缩小字体"></i><i class="darkmode fa fa-moon-o" id="darkmode" title="夜间模式"></i></div><div id="rightside-config-show"><div id="rightside_config" title="设置"><i class="fa fa-cog" aria-hidden="true"></i></div><i class="fa fa-list-ul close" id="mobile-toc-button" title="目录" aria-hidden="true"></i><i class="fa fa-arrow-up" id="go-up" title="回到顶部" aria-hidden="true"></i></div></section><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@latest/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script></body></html>

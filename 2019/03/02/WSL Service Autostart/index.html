@@ -1,0 +1,117 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Linux子系统(WSL)中的服务开机启动 | 归云阁</title><meta name="description" content="环境简介系统环境开了WSL 的Windows LTSC 2019  WSL ： Debian 发行版 Shell 环境WSL Shell  使用 ZSH 简短截说这个解决方式是在知乎上看到的，这里仅仅是搬运一下，做个记录。 WSL 服务自动启动的正确方法 创建并编辑init.wsl1sudo vim &#x2F;etc&#x2F;init.wsl  init.wsl 1234#! &#x2F;bin&#x2F;sh&#x2F;etc&#x2F;init.d"><meta name="keywords" content="WSL,Debian"><meta name="author" content="潇枫11"><meta name="copyright" content="潇枫11"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.png"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="dns-prefetch" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="crossorigin"/><link rel="dns-prefetch" href="https://fonts.googleapis.com"/><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Linux子系统(WSL)中的服务开机启动"><meta name="twitter:description" content="环境简介系统环境开了WSL 的Windows LTSC 2019  WSL ： Debian 发行版 Shell 环境WSL Shell  使用 ZSH 简短截说这个解决方式是在知乎上看到的，这里仅仅是搬运一下，做个记录。 WSL 服务自动启动的正确方法 创建并编辑init.wsl1sudo vim &#x2F;etc&#x2F;init.wsl  init.wsl 1234#! &#x2F;bin&#x2F;sh&#x2F;etc&#x2F;init.d"><meta name="twitter:image" content="https://image.zsver.com/2020/05/23/6a7691490d5dc.jpg"><meta property="og:type" content="article"><meta property="og:title" content="Linux子系统(WSL)中的服务开机启动"><meta property="og:url" content="http://blog.forestsen.com/2019/03/02/WSL%20Service%20Autostart/"><meta property="og:site_name" content="归云阁"><meta property="og:description" content="环境简介系统环境开了WSL 的Windows LTSC 2019  WSL ： Debian 发行版 Shell 环境WSL Shell  使用 ZSH 简短截说这个解决方式是在知乎上看到的，这里仅仅是搬运一下，做个记录。 WSL 服务自动启动的正确方法 创建并编辑init.wsl1sudo vim &#x2F;etc&#x2F;init.wsl  init.wsl 1234#! &#x2F;bin&#x2F;sh&#x2F;etc&#x2F;init.d"><meta property="og:image" content="https://image.zsver.com/2020/05/23/6a7691490d5dc.jpg"><meta property="article:published_time" content="2019-03-02T04:24:00.000Z"><meta property="article:modified_time" content="2020-05-23T08:52:49.205Z"><script src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js"></script><script>var autoChangeMode = '1'
+var t = Cookies.get("theme")
+if (autoChangeMode == '1'){
+  var isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
+  var isLightMode = window.matchMedia("(prefers-color-scheme: light)").matches
+  var isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined){
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport){
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour < 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+  }
+  } else if (t == 'light') activateLightMode()
+  else activateDarkMode()
+
+} else if (autoChangeMode == '2'){
+  now = new Date();
+  hour = now.getHours();
+  isNight = hour < 6 || hour >= 18
+  if(t === undefined) isNight? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode() 
+} else {
+  if ( t == 'dark' ) activateDarkMode()
+  else if ( t == 'light') activateLightMode()
+}
+
+function activateDarkMode(){
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+    document.querySelector('meta[name="theme-color"]').setAttribute('content','#000')
+  }
+}
+function activateLightMode(){
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+  document.querySelector('meta[name="theme-color"]').setAttribute('content','#fff')
+  }
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="canonical" href="http://blog.forestsen.com/2019/03/02/WSL%20Service%20Autostart/"><link rel="prev" title="内网SVN穿透踩坑" href="http://blog.forestsen.com/2019/03/03/SVN%20nat/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  bookmark: {
+    message_prev: '按',
+    message_next: '键将本页加入书签'
+  },
+  runtime_unit: '天',
+  runtime: false,
+  copyright: undefined,
+  ClickShowText: undefined,
+  medium_zoom: true,
+  fancybox: true,
+  Snackbar: undefined,
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  highlightShrink: 'false',
+  isFontAwesomeV5: false,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+  
+}</script><script>var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isSidebar: true  
+  }</script><noscript><style>
+#page-header {
+  opacity: 1
+}
+.justified-gallery img{
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="归云阁" type="application/atom+xml">
+</head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">8</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">13</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">2</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 归云</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 御风</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 忘尘</span></a></div></div></div></div><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true">     </i><div id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#环境简介"><span class="toc-number">1.</span> <span class="toc-text">环境简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#系统环境"><span class="toc-number">1.1.</span> <span class="toc-text">系统环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Shell-环境"><span class="toc-number">1.2.</span> <span class="toc-text">Shell 环境</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#简短截说"><span class="toc-number">2.</span> <span class="toc-text">简短截说</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建并编辑init-wsl"><span class="toc-number">2.1.</span> <span class="toc-text">创建并编辑init.wsl</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设置权限"><span class="toc-number">2.2.</span> <span class="toc-text">设置权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建VBS脚本"><span class="toc-number">2.3.</span> <span class="toc-text">创建VBS脚本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#编辑VBS脚本"><span class="toc-number">2.4.</span> <span class="toc-text">编辑VBS脚本</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原文链接"><span class="toc-number">3.</span> <span class="toc-text">原文链接</span></a></li></ol></div></div></div><div id="body-wrap"><div class="post-bg" id="nav" style="background-image: url(https://image.zsver.com/2020/05/23/6a7691490d5dc.jpg)"><div id="page-header"><span class="pull_left" id="blog_name"><a class="blog_title" id="site-name" href="/">归云阁</a></span><span class="pull_right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 归云</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 御风</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 忘尘</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fa fa-bars fa-fw" aria-hidden="true"></i></a></span></span></div><div id="post-info"><div id="post-title"><div class="posttitle">Linux子系统(WSL)中的服务开机启动</div></div><div id="post-meta"><div class="meta-firstline"><time class="post-meta__date"><span class="post-meta__date-created" title="发表于 2019-03-02 12:24:00"><i class="fa fa-calendar" aria-hidden="true"></i> 发表于 2019-03-02</span><span class="post-meta__separator">|</span><span class="post-meta__date-updated" title="更新于 2020-05-23 16:52:49"><i class="fa fa-history" aria-hidden="true"></i> 更新于 2020-05-23</span></time><span class="post-meta__categories"><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/Deploy/">Deploy</a></span></div><div class="meta-secondline"> </div><div class="meta-thirdline"><span class="post-meta-pv-cv"></span><span class="post-meta-commentcount"></span></div></div></div></div><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h2 id="环境简介"><a href="#环境简介" class="headerlink" title="环境简介"></a>环境简介</h2><h3 id="系统环境"><a href="#系统环境" class="headerlink" title="系统环境"></a>系统环境</h3><p>开了WSL 的<strong>Windows LTSC 2019</strong> </p>
+<p>WSL ： <strong>Debian 发行版</strong></p>
+<h3 id="Shell-环境"><a href="#Shell-环境" class="headerlink" title="Shell 环境"></a>Shell 环境</h3><p>WSL Shell  使用 <strong>ZSH</strong></p>
+<h2 id="简短截说"><a href="#简短截说" class="headerlink" title="简短截说"></a>简短截说</h2><p>这个解决方式是在知乎上看到的，这里仅仅是搬运一下，做个记录。</p>
+<p><a href="https://zhuanlan.zhihu.com/p/47733615" target="_blank" rel="noopener">WSL 服务自动启动的正确方法</a></p>
+<h3 id="创建并编辑init-wsl"><a href="#创建并编辑init-wsl" class="headerlink" title="创建并编辑init.wsl"></a>创建并编辑init.wsl</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/init.wsl</span><br></pre></td></tr></table></figure>
+
+<p><strong>init.wsl</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#! /bin/sh</span></span><br><span class="line"></span><br><span class="line">/etc/init.d/ssh <span class="variable">$1</span></span><br><span class="line">/etc/init.d/supervisor <span class="variable">$1</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="设置权限"><a href="#设置权限" class="headerlink" title="设置权限"></a>设置权限</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo chown root:root /etc/init.wsl</span><br><span class="line">sudo chmod +x /etc/init.wsl</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="创建VBS脚本"><a href="#创建VBS脚本" class="headerlink" title="创建VBS脚本"></a>创建VBS脚本</h3><p>在Windows 中 <code>Win+R</code> 运行 <code>shell :startup</code></p>
+<p>在弹出的目录中创建<code>debian.vbs</code>，如果你用的别的发行版，比如ubuntu18.04，文件名就是<code>ubuntu1804.vbs</code></p>
+<p>如果不知道自己的发行版名称可以通过以下命令查看</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl <span class="literal">-l</span></span><br></pre></td></tr></table></figure>
+
+<p><em>这条命令是在Ｗidows终端中执行而非在WSL中，在我的系统（LTSC 2019)中这条命令并非有效</em></p>
+<p>或者可以尝试这个命令</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wslconfig /l</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="编辑VBS脚本"><a href="#编辑VBS脚本" class="headerlink" title="编辑VBS脚本"></a>编辑VBS脚本</h3><p><strong>debian.vbs</strong></p>
+<figure class="highlight vbscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Set</span> ws = <span class="built_in">CreateObject</span>(<span class="string">"Wscript.Shell"</span>)</span><br><span class="line">ws.run <span class="string">"wsl -d debian -u root /etc/init.wsl start"</span>, vbhide</span><br></pre></td></tr></table></figure>
+
+<p>保存文件后，所有的步骤就都进行完了。</p>
+<h2 id="原文链接"><a href="#原文链接" class="headerlink" title="原文链接"></a>原文链接</h2><p><a href="https://zhuanlan.zhihu.com/p/47733615" target="_blank" rel="noopener">WSL 服务自动启动的正确方法</a></p>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">潇枫11</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://blog.forestsen.com/2019/03/02/WSL%20Service%20Autostart/">http://blog.forestsen.com/2019/03/02/WSL%20Service%20Autostart/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://blog.forestsen.com" target="_blank">归云阁</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/WSL/">WSL</a><a class="post-meta__tags" href="/tags/Debian/">Debian</a></div><div class="post_share"><div class="social-share" data-image="https://image.zsver.com/2020/05/23/ff71252584474.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"/><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js"></script></div></div><nav class="pagination_post" id="pagination"><div class="prev-post pull_left"><a href="/2019/03/03/SVN%20nat/"><img class="prev_cover" data-src="https://image.zsver.com/2020/05/23/1bd82249672b3.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">内网SVN穿透踩坑</div></div></a></div></nav></article></main><footer id="footer" style="background-image: url(https://image.zsver.com/2020/05/23/6a7691490d5dc.jpg)" data-type="photo"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2020 By 潇枫11</div><div class="framework-info"><span>Power by </span><a href="https://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><i class="fa fa-book" id="readmode" title="阅读模式"></i><i class="fa fa-plus" id="font_plus" title="放大字体"></i><i class="fa fa-minus" id="font_minus" title="缩小字体"></i><i class="darkmode fa fa-moon-o" id="darkmode" title="夜间模式"></i></div><div id="rightside-config-show"><div id="rightside_config" title="设置"><i class="fa fa-cog" aria-hidden="true"></i></div><i class="fa fa-list-ul close" id="mobile-toc-button" title="目录" aria-hidden="true"></i><i class="fa fa-arrow-up" id="go-up" title="回到顶部" aria-hidden="true"></i></div></section><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@latest/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script></body></html>
