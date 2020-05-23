@@ -2,12 +2,11 @@
 title: Linux子系统(WSL)中的服务开机启动
 date: 2019-3-2 12:24
 categories: 
-	- Install
+	- Deploy
 tags: 
 	- Debian
 	- WSL
-	- Autostart
-cover: https://cloud.zzserver.top/s/r6Hm2pFPC85razq/preview
+cover: https://image.zsver.com/2020/05/23/6a7691490d5dc.jpg
 ---
 
 

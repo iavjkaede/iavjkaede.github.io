@@ -2,12 +2,12 @@
 title: Linux子系统（WSL）Debian安装aria2并配置AriaNg
 date: 
 categories: 
-	- Install
+	- Deploy
 tags: 
 	- WSL
 	- Aria2
 	- Debian
-cover: https://cloud.zzserver.top/s/5R6JYam8nNRBCkN/preview
+cover: https://image.zsver.com/2020/05/23/ff71252584474.jpg 
 
 	
 ---

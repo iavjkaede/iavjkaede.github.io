@@ -2,12 +2,12 @@
 title: ASP.NET 之 IIS托管的后台任务
 date: 2019-6-1 12:39
 categories: 
-	- Web
+	- .NET
 tags: 
 	- IIS
 	- Background Task
 	- C#
-cover: https://cloud.zzserver.top/s/8Sew3gzyter7fDj/preview
+cover: https://image.zsver.com/2020/05/23/5f1cb7c259843.jpg
 ---
 
 

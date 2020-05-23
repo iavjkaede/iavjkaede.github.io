@@ -2,12 +2,12 @@
 title: .NetCore Web 项目的插件实现
 date: 
 categories:
-	- NetCore
+	- .NET
 tags: 
-	- .NetCore
+	- .NET
 	- C#
 	- Plugins
-cover: https://cloud.zzserver.top/s/ojFWrYriHidHmwH/preview
+cover: https://image.zsver.com/2020/05/23/67597c6252dd0.jpg
 ---
 
 ## 前言

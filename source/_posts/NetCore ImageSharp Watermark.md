@@ -2,12 +2,11 @@
 title: NetCore 使用 ImageSharp 为图片添加水印
 date: 
 categories: 
-	- NetCore
+	- .NET
 tags: 
-	- NetCore
-	- Watermark
-	- ImageSharp
-cover: 
+	- .NET
+	- Image
+cover: https://image.zsver.com/2020/05/23/43208491ef0e8.jpg
 ---
 
 ## 环境简介

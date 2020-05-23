@@ -2,13 +2,13 @@
 title: Linux子系统（WSL）Debian安装Nodejs
 date: 2019年7月4日
 categories: 
-	- Install
+	- Deploy
 tags: 
 	- WSL
 	- Npm
 	- Nodejs
 	- Debian
-cover: https://cloud.zzserver.top/s/NEWeSAPp9bGE7Gi/preview
+cover: https://image.zsver.com/2020/05/23/9c88d021ce36d.jpg
 ---
 
 ## 环境简介

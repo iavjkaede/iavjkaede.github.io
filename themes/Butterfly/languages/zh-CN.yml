@@ -3,8 +3,8 @@ sidebar:
   have_read: 你已经读了
 
 footer:
-  driven: 驱动
-  theme: 主题
+  driven: Power by
+  theme: Theme
 
 copy:
   success: 复制成功
@@ -15,7 +15,7 @@ page:
   articles: 文章总览
   tag: 标签
   category: 分类
-  archives: 归档
+  archives: 忘尘
 
 sticky: 置顶
 no_title: 无题
