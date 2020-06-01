@@ -4,7 +4,6 @@ categories:
 	- .NET
 tags: 
 	- C#
-	- .NET
 cover: https://image.zsver.com/2020/05/23/d5c475845aca9.jpg
 ---
 

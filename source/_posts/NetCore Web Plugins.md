@@ -4,7 +4,6 @@ date:
 categories:
 	- .NET
 tags: 
-	- .NET
 	- C#
 	- Plugins
 cover: https://image.zsver.com/2020/05/23/67597c6252dd0.jpg
