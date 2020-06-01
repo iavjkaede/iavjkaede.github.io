@@ -18,7 +18,8 @@ cover:
 
 ## 利器
 
-**以下是在下所使用的工具**
+以下是在下所使用的工具
+
 - VisualStduio 2019
 - .netcore 3.1
 
@@ -27,7 +28,6 @@ cover:
 ### 道生一 | 使用Woker Service 模板创建服务
 
 启动`VisualStudio 2019`，选择`创建新项目`,在上方的搜索栏搜索`service` ,如下图。
-
 
 ![创建Worker Service](https://image.zsver.com/2020/06/01/45ed7d8f41ad2.png)
 
@@ -40,6 +40,7 @@ dotnet new worker -n MyService
 ```
 
 窥探一番项目文件，可见里面有两个主要的文件
+
 - #### Program.cs
 
 ```csharp
@@ -107,13 +108,11 @@ dotnet new worker -n MyService
             "-------------"
         };
 
-       
 
         protected async override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while(!stoppingToken.IsCancellationRequested)
             {
-                
 
                 foreach (var line in _lines)
                 {
@@ -125,9 +124,7 @@ dotnet new worker -n MyService
                         await Task.Delay(100);
                     }
 
-                   
                     Console.Write("\r");
-                   
                 }
 
 
@@ -135,22 +132,40 @@ dotnet new worker -n MyService
         }
     }
 ```
+
 除此之外，还需要将Worker 注入。
 `services.AddHostedService<MyWorker>();`
 注释掉 `services.AddHostedService<Worker>();`,而只关注`MyWorker`
 
 运行之后，就可以看到内容输出了。这点很重要，为什么还会有控制台窗口，而不是一个无界面的服务？
 ![运行情况](https://image.zsver.com/2020/06/01/1a5bde9b72a3e.gif)
-嗯，在程序没有被部署成服务之前，它和控制台程序别无二致。  
+嗯，现在它还是一个控制台程序。  
 那么，如和部署成服务呢？  
 
 ### 三生万物 | 部署Windows 服务
 
+首先，要做一些改动  
 
-这里需要使用一把武器 `sc`  
+1. 为`MyService`项目添加nuget包 `Microsoft.Extensions.Hosting.WindowsServices`
+
+2. 修改 `Program.cs` 中的 `CreateHostBuilder` 函数，在最后加上 `UseWindowsService()`  
+如下  
+
+```csharp
+  static IHostBuilder CreateHostBuilder(string[] args)
+            => Host.CreateDefaultBuilder(args).ConfigureServices(services =>
+            {
+                services.AddHostedService<MyWorker>();
+            }).UseWindowsService();
+```
+
+接着  
+这里需要使用另一把武器 `sc`  
 打开cmd窗口（使用Powershell 也可以，但是低版本的Powershell 可能会出错）
+
 ```powershell
 sc create MyService binpath=E:\full\path\to\yourbinaryfile.exe
+# binpath 一定是绝对路径，否则运行服务会提示系统找不到指定文件
 
 # 另外
 sc start MyService
@@ -158,14 +173,13 @@ sc stop MyService
 sc delete MyService
 
 ```
+
 程序在控制台输出，所以安装成服务并不能看到效果。谁管呢，总而言之，使用.netcore创建服务程序很简单，这种方式用在.netframework上又当如何呢？阁下可自行尝试，此处不再多言。  
   
 &emsp;*更多创建服务的方式，可以点击下面的引用链接*
-## 终
 
+## 终
 
 ### Reference
 
 [Creating Windows Services In .NET Core – Part 3 – The “.NET Core Worker” Way](https://dotnetcoretutorials.com/2019/12/07/creating-windows-services-in-net-core-part-3-the-net-core-worker-way/)
-
-
