@@ -6,15 +6,24 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://blog.iavjkaede.com">
-  <title>Tag: IIS | 归云阁</title>
+  <title>基于netcore 编写本地服务 | 归云阁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="归云阁">
-<meta property="og:url" content="http://blog.iavjkaede.com/tags/IIS/index.html">
+  <meta name="description" content="基于.netcore 编写本地服务服务程序，一般代表一些需要长期稳定运行，没有界面交互的程序，周而复始，生生不息。那么,怎么用.netcore 来编织这么一个程序呢？ 利器以下是在下所使用的工具  VisualStduio 2019 .netcore 3.1  起始道生一 | 使用Woker Service 模板创建服务启动VisualStudio 2019，选择创建新项目,在上方的搜索栏搜索se">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于netcore 编写本地服务">
+<meta property="og:url" content="http://blog.iavjkaede.com/2020/06/21/Create%20native%20service%20with%20dotnet/index.html">
 <meta property="og:site_name" content="归云阁">
+<meta property="og:description" content="基于.netcore 编写本地服务服务程序，一般代表一些需要长期稳定运行，没有界面交互的程序，周而复始，生生不息。那么,怎么用.netcore 来编织这么一个程序呢？ 利器以下是在下所使用的工具  VisualStduio 2019 .netcore 3.1  起始道生一 | 使用Woker Service 模板创建服务启动VisualStudio 2019，选择创建新项目,在上方的搜索栏搜索se">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://image.zsver.com/2020/06/01/45ed7d8f41ad2.png">
+<meta property="og:image" content="https://image.zsver.com/2020/06/01/1a5bde9b72a3e.gif">
+<meta property="article:published_time" content="2020-06-21T13:19:43.246Z">
+<meta property="article:modified_time" content="2020-06-21T13:19:43.246Z">
 <meta property="article:author" content="潇枫11">
+<meta property="article:tag" content="C#">
+<meta property="article:tag" content="Service">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://image.zsver.com/2020/06/01/45ed7d8f41ad2.png">
   
     <link rel="alternative" href="/atom.xml" title="归云阁" type="application/atom+xml">
   
@@ -154,56 +163,115 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Create native service with dotnet" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/06/01/ASP.NET%20Website%20Background%20Job/" class="archive-article-date">
-  	<time datetime="2019-06-01T04:39:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-01</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/06/01/ASP.NET%20Website%20Background%20Job/">ASP.NET 之 IIS托管的后台任务</a>
+    <h1 class="article-title" itemprop="name">
+      基于netcore 编写本地服务
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2020/06/21/Create%20native%20service%20with%20dotnet/" class="archive-article-date">
+  	<time datetime="2020-06-21T13:19:43.246Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="基于-netcore-编写本地服务"><a href="#基于-netcore-编写本地服务" class="headerlink" title="基于.netcore 编写本地服务"></a>基于.netcore 编写本地服务</h1><p>服务程序，一般代表一些需要长期稳定运行，没有界面交互的程序，周而复始，生生不息。那么,怎么用.netcore 来编织这么一个程序呢？</p>
+<h2 id="利器"><a href="#利器" class="headerlink" title="利器"></a>利器</h2><p>以下是在下所使用的工具</p>
+<ul>
+<li>VisualStduio 2019</li>
+<li>.netcore 3.1</li>
+</ul>
+<h2 id="起始"><a href="#起始" class="headerlink" title="起始"></a>起始</h2><h3 id="道生一-使用Woker-Service-模板创建服务"><a href="#道生一-使用Woker-Service-模板创建服务" class="headerlink" title="道生一 | 使用Woker Service 模板创建服务"></a>道生一 | 使用Woker Service 模板创建服务</h3><p>启动<code>VisualStudio 2019</code>，选择<code>创建新项目</code>,在上方的搜索栏搜索<code>service</code> ,如下图。</p>
+<p><img src= data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs= data-src="https://image.zsver.com/2020/06/01/45ed7d8f41ad2.png" alt="创建Worker Service"></p>
+<p>或者使用<code>dotnet new worker</code></p>
+<p>这里在下创建一个名为<code>MyService</code>的项目</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dotnet new worker -n MyService</span><br></pre></td></tr></table></figure>
+
+<p>窥探一番项目文件，可见里面有两个主要的文件</p>
+<ul>
+<li><h4 id="Program-cs"><a href="#Program-cs" class="headerlink" title="Program.cs"></a>Program.cs</h4></li>
+</ul>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="keyword">string</span>[] args</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  CreateHostBuilder(args).Build().Run();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> IHostBuilder <span class="title">CreateHostBuilder</span>(<span class="params"><span class="keyword">string</span>[] args</span>)</span> =&gt;</span><br><span class="line">          Host.CreateDefaultBuilder(args)</span><br><span class="line">              .ConfigureServices((hostContext, services) =&gt;</span><br><span class="line">              &#123;</span><br><span class="line">                  services.AddHostedService&lt;Worker&gt;();</span><br><span class="line">              &#125;);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><h4 id="Worker-cs"><a href="#Worker-cs" class="headerlink" title="Worker.cs"></a>Worker.cs</h4></li>
+</ul>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Worker</span> : <span class="title">BackgroundService</span></span><br><span class="line">   &#123;</span><br><span class="line">       <span class="keyword">private</span> <span class="keyword">readonly</span> ILogger&lt;Worker&gt; _logger;</span><br><span class="line"></span><br><span class="line">       <span class="function"><span class="keyword">public</span> <span class="title">Worker</span>(<span class="params">ILogger&lt;Worker&gt; logger</span>)</span></span><br><span class="line"><span class="function"></span>       &#123;</span><br><span class="line">           _logger = logger;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="function"><span class="keyword">protected</span> <span class="keyword">override</span> <span class="keyword">async</span> Task <span class="title">ExecuteAsync</span>(<span class="params">CancellationToken stoppingToken</span>)</span></span><br><span class="line"><span class="function"></span>       &#123;</span><br><span class="line">           <span class="keyword">while</span> (!stoppingToken.IsCancellationRequested)</span><br><span class="line">           &#123;</span><br><span class="line">               _logger.LogInformation(<span class="string">"Worker running at: &#123;time&#125;"</span>, DateTimeOffset.Now);</span><br><span class="line">               <span class="keyword">await</span> Task.Delay(<span class="number">1000</span>, stoppingToken);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>这两个文件都是相当简洁明了的。<br><code>Program.cs</code> 创建<code>Host</code>并对Worker进行托管。<br>那么Worker是什么?<br> &emsp; 从<code>Worker.cs</code>中可见Worker只是继承自<code>BackgroundService</code>的子类。<br><code>BackgroundService</code>又是何方神圣呢？<br>  &emsp;窥一眼<code>MyService</code>的项目依赖，依赖包里有<code>Microsoft.Extensions.Hosting</code>这一项，<code>BackgroundService</code>正是来自于此。<br>这么一看，不过如此，如果阁下不使用VS 模板来创建自己的服务，想必也是易如反掌。</p>
+<h3 id="一生二-编写属于自己的Worker"><a href="#一生二-编写属于自己的Worker" class="headerlink" title="一生二 | 编写属于自己的Worker"></a>一生二 | 编写属于自己的Worker</h3><p>新建 <code>MyWorker.cs</code> 文件，内容如下</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title">MyWorker</span> : <span class="title">BackgroundService</span></span><br><span class="line">   &#123;</span><br><span class="line">       <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">string</span>[] _lines =</span><br><span class="line">       &#123;</span><br><span class="line">           <span class="string">"沉舟侧畔千帆过，"</span>,</span><br><span class="line">           <span class="string">"病树前头万木春。"</span>,</span><br><span class="line">           <span class="string">"-------------"</span>,</span><br><span class="line">           <span class="string">"长风破浪会有时，"</span>,</span><br><span class="line">           <span class="string">"直挂云帆济沧海。"</span>,</span><br><span class="line">           <span class="string">"-------------"</span>,</span><br><span class="line">           <span class="string">"谁无暴风劲雨时，"</span>,</span><br><span class="line">           <span class="string">"守得云开见月明。"</span>,</span><br><span class="line">           <span class="string">"-------------"</span></span><br><span class="line">       &#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">       <span class="function"><span class="keyword">protected</span> <span class="keyword">async</span> <span class="keyword">override</span> Task <span class="title">ExecuteAsync</span>(<span class="params">CancellationToken stoppingToken</span>)</span></span><br><span class="line"><span class="function"></span>       &#123;</span><br><span class="line">           <span class="keyword">while</span>(!stoppingToken.IsCancellationRequested)</span><br><span class="line">           &#123;</span><br><span class="line"></span><br><span class="line">               <span class="keyword">foreach</span> (<span class="keyword">var</span> line <span class="keyword">in</span> _lines)</span><br><span class="line">               &#123;</span><br><span class="line">                   <span class="keyword">await</span> Task.Delay(<span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">                   <span class="keyword">foreach</span> (<span class="keyword">var</span> ch <span class="keyword">in</span> line)</span><br><span class="line">                   &#123;</span><br><span class="line">                       Console.Write(ch);</span><br><span class="line">                       <span class="keyword">await</span> Task.Delay(<span class="number">100</span>);</span><br><span class="line">                   &#125;</span><br><span class="line"></span><br><span class="line">                   Console.Write(<span class="string">"\r"</span>);</span><br><span class="line">               &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>除此之外，还需要将Worker 注入。<br><code>services.AddHostedService&lt;MyWorker&gt;();</code><br>注释掉 <code>services.AddHostedService&lt;Worker&gt;();</code>,而只关注<code>MyWorker</code></p>
+<p>运行之后，就可以看到内容输出了。这点很重要，为什么还会有控制台窗口，而不是一个无界面的服务？<br><img src= data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs= data-src="https://image.zsver.com/2020/06/01/1a5bde9b72a3e.gif" alt="运行情况"><br>嗯，现在它还是一个控制台程序。<br>那么，如和部署成服务呢？  </p>
+<h3 id="三生万物-部署Windows-服务"><a href="#三生万物-部署Windows-服务" class="headerlink" title="三生万物 | 部署Windows 服务"></a>三生万物 | 部署Windows 服务</h3><p>首先，要做一些改动  </p>
+<ol>
+<li><p>为<code>MyService</code>项目添加nuget包 <code>Microsoft.Extensions.Hosting.WindowsServices</code></p>
+</li>
+<li><p>修改 <code>Program.cs</code> 中的 <code>CreateHostBuilder</code> 函数，在最后加上 <code>UseWindowsService()</code><br>如下  </p>
+</li>
+</ol>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> IHostBuilder <span class="title">CreateHostBuilder</span>(<span class="params"><span class="keyword">string</span>[] args</span>)</span></span><br><span class="line"><span class="function"></span>          =&gt; Host.CreateDefaultBuilder(args).ConfigureServices(services =&gt;</span><br><span class="line">          &#123;</span><br><span class="line">              services.AddHostedService&lt;MyWorker&gt;();</span><br><span class="line">          &#125;).UseWindowsService();</span><br></pre></td></tr></table></figure>
+
+<p>接着<br>这里需要使用另一把武器 <code>sc</code><br>打开cmd窗口（使用Powershell 也可以，但是低版本的Powershell 可能会出错）</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sc create MyService binpath=E:\full\path\to\yourbinaryfile.exe</span><br><span class="line"><span class="comment"># binpath 一定是绝对路径，否则运行服务会提示系统找不到指定文件</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 另外</span></span><br><span class="line">sc start MyService</span><br><span class="line">sc stop MyService</span><br><span class="line">sc delete MyService</span><br></pre></td></tr></table></figure>
+
+<p>程序在控制台输出，所以安装成服务并不能看到效果。谁管呢，总而言之，使用.netcore创建服务程序很简单，这种方式用在.netframework上又当如何呢？阁下可自行尝试，此处不再多言。  </p>
+<p>&emsp;<em>更多创建服务的方式，可以点击下面的引用链接</em></p>
+<h2 id="终"><a href="#终" class="headerlink" title="终"></a>终</h2><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p><a href="https://dotnetcoretutorials.com/2019/12/07/creating-windows-services-in-net-core-part-3-the-net-core-worker-way/" target="_blank" rel="noopener">Creating Windows Services In .NET Core – Part 3 – The “.NET Core Worker” Way</a></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">IIS</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Background Task</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">C#</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Service</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
@@ -216,17 +284,104 @@
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://blog.iavjkaede.com/2020/06/21/Create%20native%20service%20with%20dotnet/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2020/05/18/Install%20Aria2%20for%20Debian%20WSL/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Linux子系统（WSL）Debian安装aria2并配置AriaNg</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -249,9 +404,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
