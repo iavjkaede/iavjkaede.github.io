@@ -9,21 +9,21 @@ tags:
 cover: https://image.zsver.com/2020/05/23/6a7691490d5dc.jpg
 ---
 
-
-
 ## 环境简介
 
 ### 系统环境
 
-开了WSL 的**Windows LTSC 2019** 
+开了WSL的 **Windows LTSC 2019**
 
-WSL ： **Debian 发行版**
+WSL： **Debian 发行版**
+
+---
 
 ### Shell 环境
 
-WSL Shell  使用 **ZSH**
+WSL Shell： **ZSH**
 
-
+---
 
 ## 简短截说
 
@@ -34,10 +34,12 @@ WSL Shell  使用 **ZSH**
 ### 创建并编辑init.wsl
 
 ```bash
+
 sudo vim /etc/init.wsl
+
 ```
 
-**init.wsl**
+init.wsl
 
 ```bash
 #! /bin/sh
@@ -53,8 +55,6 @@ sudo chown root:root /etc/init.wsl
 sudo chmod +x /etc/init.wsl
 ```
 
-
-
 ### 创建VBS脚本
 
 在Windows 中 `Win+R` 运行 `shell :startup`
@@ -67,7 +67,7 @@ sudo chmod +x /etc/init.wsl
 wsl -l
 ```
 
-*这条命令是在Ｗidows终端中执行而非在WSL中，在我的系统（LTSC 2019)中这条命令并非有效*
+！*这条命令是在Ｗidows终端中执行而非在WSL中，在我的系统（LTSC 2019)中这条命令并非有效*
 
 或者可以尝试这个命令
 
@@ -75,11 +75,9 @@ wsl -l
 wslconfig /l
 ```
 
-
-
 ### 编辑VBS脚本
 
-**debian.vbs**
+debian.vbs
 
 ```vbscript
 Set ws = CreateObject("Wscript.Shell")
@@ -88,9 +86,11 @@ ws.run "wsl -d debian -u root /etc/init.wsl start", vbhide
 
 保存文件后，所有的步骤就都进行完了。
 
+### 2020年7月13日 更
 
+WSL2 中用这种方式有问题，系统启动后不能通过localhost 访问。  
+暂时还未找到解决方式。
 
 ## 原文链接
 
 [WSL 服务自动启动的正确方法](https://zhuanlan.zhihu.com/p/47733615)
-

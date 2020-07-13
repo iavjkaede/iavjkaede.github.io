@@ -8,7 +8,7 @@ tags:
     - NAT
 cover: https://image.zsver.com/2020/05/23/1bd82249672b3.jpg
 ---
-# 记一次SVN 内网穿透代理
+
 
 ## 准备
 
@@ -37,23 +37,17 @@ WSL Debian 9
 
 ### 反向代理
 
-
-
-首先安装nginx 
+首先安装nginx
 
 ```bash
 sudo apt install nginx
 ```
-
-
 
 启用 nginx
 
 ```bash
 sudo service nginx start
 ```
-
-
 
 配置反代
 
@@ -68,46 +62,45 @@ sudo vim svnproxy.conf
 ```nginx
 server {
 
-        listen 7777;	# nginx 监听的端口号，反代的服务通过此端口向外服务
+        # nginx 监听的端口号，反代的服务通过此端口向外服务
+        listen 7777;
+
         server_name localhost;
         location /{
 
-        		
                 set $fixed_destination $http_destination;
-        		
-        		# 这个地方很重要，坑在这，如果我们通过 http 协议来访问我们
-        		# 的主机A，而主机A 需要通过https协议访问SVN服务器
-        		# 那么需要向下面三行这样写
+
+                # 这个地方很重要，坑在这，如果我们通过 http 协议来访问我们
+                # 的主机A，而主机A 需要通过https协议访问SVN服务器
+                # 那么需要向下面三行这样写
+
                 if ( $http_destination ~* ^http(.*)$ ) {
-                	set $fixed_destination https$1;
+                    set $fixed_destination https$1;
                 }
-        		
-        		# 反之，如果你通过https协议访问主机A，通过http协议访问 SVN服务器
-        		# 需要像这么写，区别很明显，我不再多说
-            	#if ( $http_destination ~* ^https(.*)$ ) {
-                #	set $fixed_destination http$1;
+
+                # 反之，如果你通过https协议访问主机A，通过http协议访问 SVN服务器
+                # 需要像这么写，区别很明显，我不再多说
+                #if ( $http_destination ~* ^https(.*)$ ) {
+                #    set $fixed_destination http$1;
                 #}
-        
-        		# 不像上面做会出什么问题呢，问题就是，外网通过主机A可以正常进行Update，但是无法Commit，原因大致是http COPY PUT 之类的操作经过反代无法正确执行。
-        
+
+                # 不像上面做会出什么问题呢，问题就是，外网通过主机A可以正常进行Update，但是无法Commit，原因大致是http COPY PUT 之类的操作经过反代无法正确执行。
+
                 proxy_set_header Destination $fixed_destination;
                 proxy_set_header Host $http_host;
 
-        		# 要反代的SVN服务器地址，确保SVN服务能提供Https 访问
+                # 要反代的SVN服务器地址，确保SVN服务能提供Https 访问
                 proxy_pass      https://192.168.0.2;
         }
 }
+
 ```
 
-
-
-配置好保存我们重载下nginx
+配置好保存,重载下nginx
 
 ```bash
 sudo nginx -t && nginx -s reload
 ```
-
-
 
 可以在本地通过浏览器 访问A 主机的`7777` 端口看一下，用SVN在本地测试以下也Ok
 
@@ -115,13 +108,8 @@ sudo nginx -t && nginx -s reload
 
 穿透的过程我就不在详细讲了。在Natapp 上开条隧道，web服务用的，然后下载它的程序在WLS启动，网站上都用怎么用哈，代理端口号填写上面配置的端口号就可以了。避免麻烦的话可以买个收费的隧道，价格可以，主要有固定域名。要说一点的是，可以用Supervisor 做个进程守护，然后配置下开机自启（我有写过这个的），完美。
 
-
-
 ### 最后
 
 有个坑我一定要讲一下，我在主机A上使用SVN服务一切正常，然后反代后通过外网访问SVN，发现重命名的文件没办法提交了。经过一番折磨终于找到了问题，那就是**SVN 仓库文件夹中有中文字符**，很坑，所以SVN仓库里最好不要出现中文路径。
 
 到此，告一段落。
-
-
-

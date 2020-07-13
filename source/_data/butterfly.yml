@@ -497,7 +497,7 @@ font:
 # 左上角网站名字 主页居中网站名字
 blog_title_font:
   font_link: https://fonts.googleapis.com/css?family=Titillium+Web #字体链接
-  font-family: KaiTi, Titillium Web, PingFang SC, Hiragino Sans GB, "Microsoft YaHei", Helvetica Neue, Helvetica, Arial, sans-serif
+  font-family: Titillium Web, PingFang SC, Hiragino Sans GB, "Microsoft YaHei", Helvetica Neue, Helvetica, Arial, sans-serif
 
 # 水平分隔綫
 hr:
@@ -525,13 +525,11 @@ subtitle:
   sub:
     - 醉卧美人膝，醒握杀人剑
     - 不求连城璧，但求杀人权
-    - 十步杀一人，千里不留行
-    - 事了拂衣去，深藏功与名
 
 # fontawesome图标
 # 默认使用的是 fontawesome v4版本的图标
 fontawesome_v5:
-  enable: false
+  enable: true
 
 # 加载动画 Loading Animation
 preloader: false

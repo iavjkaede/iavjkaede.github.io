@@ -10,15 +10,11 @@ tags:
 cover: https://image.zsver.com/2020/05/23/5f1cb7c259843.jpg
 ---
 
-
-
-# ASP.NET 之 IIS托管的后台任务
-
 ## 前言
 
 &emsp;&emsp;可能有这样一个需求，我们希望网站后台每隔一段时间自动执行某些任务。然而在网站部署到IIS上的情况下，由于IIS应用程序池自动回收的原因，导致任务中断，无法一直保持后台运行。
 
-​		现在，我们来找出一个解决方法。嗯。
+​现在，我们来找出一个解决方法。嗯。
 
 ## 环境简介
 
@@ -32,19 +28,17 @@ Windows 10 1903
 
 工具：Visual Studio 2019
 
-SDK：.Netframework 4.6.2 
+SDK：.Netframework 4.6.2
 
 ### 部署环境
 
 IIS Express
 
-
-
 ## 实现
 
 ### 利用定时器实现后台任务
 
-**JobManager.cs**
+！**JobManager.cs**
 
 ```csharp
 using System;
@@ -56,21 +50,19 @@ public class JobManager
     {
          m_timer = new Timer(new TimerCallback(TimerCallback));
     }
-    
+
     private static void TimerCallback(object target)
     {
         // do work here
     }
-    
+
     public static void Start()
     {
-        // interval 1 min 
+        // interval 1 min
         m_timer.Change(TimeSpan.Zero, TimeSpan.FromMinutes(1));
     }
 }
 ```
-
-
 
 使用
 
@@ -86,13 +78,13 @@ public class JobManager
 
 ---
 
-###  Application_End 中唤醒 IIS
+### Application_End 中唤醒 IIS
 
-​	应用程序池进行回收的时候会调用*Application_End* 方法，所以，在这里继续将IIS唤醒即可。
+​应用程序池进行回收的时候会调用*Application_End* 方法，所以，在这里继续将IIS唤醒即可。  
 
-​	我把关键的代码放在这里
+​我把关键的代码放在这里
 
-**Global.asax.cs**
+！**Global.asax.cs**
 
 ```csharp
 protected async void Application_End(object sender,EventArgs e)
@@ -102,7 +94,7 @@ protected async void Application_End(object sender,EventArgs e)
     try{
           using(HttpClient client = new HttpClient())
           {
-			 var response = await client.GetAsync(url);
+             var response = await client.GetAsync(url);
           }
     }catch(Exception)
     {
@@ -117,9 +109,9 @@ protected async void Application_End(object sender,EventArgs e)
 
 ---
 
-###  IRegisteredObject 唤醒IIS
+### IRegisteredObject 唤醒IIS
 
-####  IRegisteredObject 接口
+#### IRegisteredObject 接口
 
 ```csharp
 public interface IRegisteredObject
@@ -128,7 +120,7 @@ public interface IRegisteredObject
 }
 ```
 
-​	它是在`System.Web.Hosting` 下的一个接口，它是做什么用的呢？
+​它是在`System.Web.Hosting` 下的一个接口，它是做什么用的呢？
 
 搬运一下MSDN的描述 ：
 
@@ -151,19 +143,17 @@ public interface IRegisteredObject
 ```csharp
 public class JobHost:IRegisteredObject
 {
-	public JobHost()
-	{
-		HostingEnvironment.RegisterObject(this);
-	}
-	public void Stop(bool immediate)
-	{
-		// 在这里唤醒IIS
-		HostingEnvironment.UnregisterObject(this);
-	}
+    public JobHost()
+    {
+        HostingEnvironment.RegisterObject(this);
+    }
+    public void Stop(bool immediate)
+    {
+        // 在这里唤醒IIS
+        HostingEnvironment.UnregisterObject(this);
+    }
 }
 ```
-
-
 
 在使用JobHost 之前需要调用
 
@@ -171,7 +161,7 @@ public class JobHost:IRegisteredObject
 
 在Stop 被调用时  要调用
 
-`HostingEnvironment.UnregisterObject(this); ` 进行反注册
+`HostingEnvironment.UnregisterObject(this);` 进行反注册
 
 ---
 
@@ -179,7 +169,7 @@ public class JobHost:IRegisteredObject
 
 通过第二种解决方式实现后台任务的完整代码
 
-##### JobHost.cs
+#### JobHost.cs
 
 ```csharp
 class JobHost : IRegisteredObject
@@ -217,8 +207,6 @@ class JobHost : IRegisteredObject
 }
 ```
 
-
-
 ##### JobManager.cs
 
 ```csharp
@@ -226,69 +214,59 @@ public class JobManager
 {
     private static Timer m_timer;
     private static readonly JobHost m_jobHost = new JobHost();
-    
+
     static JobManager()
     {
          m_timer = new Timer(new TimerCallback(TimerCallback));
     }
-    
+
     private static void TimerCallback(object target)
     {
         m_jobHost.DoWork(()=>{
             // do work here
         });
     }
-    
+
     public static void Start()
     {
-        // interval 1 min 
+        // interval 1 min
         m_timer.Change(TimeSpan.Zero, TimeSpan.FromMinutes(1));
     }
-    
+
     public static void Wakeup()
     {
-         string url = "www.yousite.com";
-    	try
+        string url = "www.yousite.com";
+        try
         {
             using(HttpClient client = new HttpClient())
             {
                var response = await client.GetAsync(url);
             }
-            
+
         }catch(Exception)
         {
             // 处理可能出现的异常
         }
     }
-    
+
 }
 ```
 
-
-
-
-
 我这里讲的不够详细，如果要参考更多细节，这里贴出参考的blog
 
-[The Dangers of Implementing Recurring Background Tasks In ASP.NET](https://haacked.com/archive/2011/10/16/the-dangers-of-implementing-recurring-background-tasks-in-asp-net.aspx/) 
-
-
+[The Dangers of Implementing Recurring Background Tasks In ASP.NET](https://haacked.com/archive/2011/10/16/the-dangers-of-implementing-recurring-background-tasks-in-asp-net.aspx/)
 
 ---
 
 ## 最后
 
-​	这种方式的原理很简单，IIS就像个贪睡的孩子，当他快要打瞌睡的时候，你就拍拍他的脑袋。
+​这种方式的原理很简单，IIS就像个贪睡的孩子，当他快要打瞌睡的时候，你就拍拍他的脑袋。
 
-   “ 嘿，好孩子，该工作了。”
+   “ 喂，臭弟弟，起来写作业了。”
 
    没错，就是这么残酷😂。
 
-
-
-**当我们需要持续稳定的执行后台任务的时候，更好的方式应该是写一个服务程序，或者控制台**
-
-
+！**当我们需要持续稳定的执行后台任务的时候，更好的方式应该是写一个服务程序，或者控制台**
 
 ## 参考
 

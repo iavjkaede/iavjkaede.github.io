@@ -2,17 +2,13 @@
 title: 基于netcore 编写本地服务
 categories: 
     - .NET
-
 tags: 
     - C#
     - Service
-
 date: 2020年5月27日
-cover: 
-
+cover: https://image.zsver.com/2020/05/23/ff71252584474.jpg
 ---
 
-# 基于.netcore 编写本地服务
 
 服务程序，一般代表一些需要长期稳定运行，没有界面交互的程序，周而复始，生生不息。那么,怎么用.netcore 来编织这么一个程序呢？
 
@@ -175,6 +171,9 @@ sc delete MyService
 ```
 
 程序在控制台输出，所以安装成服务并不能看到效果。谁管呢，总而言之，使用.netcore创建服务程序很简单，这种方式用在.netframework上又当如何呢？阁下可自行尝试，此处不再多言。  
+
+2020年7月13日 补充
+在.netframework 上使用也是没问题的，但是.netcore 可以跨平台食用
   
 &emsp;*更多创建服务的方式，可以点击下面的引用链接*
 

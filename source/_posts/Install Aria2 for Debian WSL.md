@@ -7,9 +7,7 @@ tags:
 	- WSL
 	- Aria2
 	- Debian
-cover: https://image.zsver.com/2020/05/23/ff71252584474.jpg 
-
-	
+cover: https://image.zsver.com/2020/05/23/ff71252584474.jpg
 ---
 
 ## 环境简介
@@ -48,11 +46,7 @@ aria2c --version
 
 成功输出版本信息后，安装就完成了
 
-
-
 ### 配置aria2
-
-<span id="aria2_conf">配置aria2</span>
 
 安装是很简单，配置aria2 却是有些棘手的，当然不进行配置也是可以使用的，这里不过多介绍，讲一下我自己的配置。
 
@@ -63,7 +57,7 @@ aria2c --version
 WSL的时候就无需重新创建编写配置文件了。
 
 ```bash
-cd 
+cd
 mkdir .aria2
 cd .aria2
 touch aria2.conf
@@ -100,7 +94,7 @@ disk-cache=32M
 # 因为只在本地使用，不用rpc安全设置也可以
 enable-rpc=true
 rpc-allow-origin-all=true
-rpc-listen-port=6800	
+rpc-listen-port=6800
 
 # 其他更详细的配置自行查阅吧，或者待会我们配置AriaNg就可以具体看可以配置哪些内容了
 ```
@@ -113,13 +107,11 @@ rpc-listen-port=6800
 aria2c --conf-path /home/$LOGNAME/.aria2/aria2.conf
 ```
 
-*配置这个地方可能会有坑，如果配置文件写错了，这个命令可能没有任何报错就退出了，或者rpc没有成功开启。执行完这条命令后，在浏览器地址栏输入http://localhost:6800*
+！*配置这个地方可能会有坑，如果配置文件写错了，这个命令可能没有任何报错就退出了，或者rpc没有成功开启。执行完这条命令后，在浏览器地址栏输入http://localhost:6800*
 
 *如果出现404而不是未响应，说明rpc是正常开启了的（在没有其他进程占用6800端口的情况下），这里提及的端口号对应配置文件中的端口号`rpc-listen-port`*
 
 另外，我不知道aria2 有没有检查配置文件的命令，我是用笨方法排除错误，把配置文件的`daemon=true` 去掉然后使用配置文件启动aria2c，会提示错误信息的。如果没有提示，可以先把不重要的配置注释掉再次启动，rpc是一定要开启的，其他配置对我来说比较次要。
-
- 
 
 ### 配置AriaNg
 
@@ -159,7 +151,7 @@ touch server.js
 
 编辑该文件输入以下内容并保存。
 
-**server.js**
+！**server.js**
 
 ```js
 let express = require("express");
@@ -185,9 +177,7 @@ npm install express --save
 node server.js
 ```
 
-
-
-*这几个命令都是在最初建立的目录下完成的*
+！*这几个命令都是在最初建立的目录下完成的*
 
 当你看到终端输出`Server start !`，去浏览器输出http://localhost:8081，看是不是打开了AriaNg👌。
 
@@ -203,8 +193,6 @@ sudo apt install supervisor
 
 在我使用的debian中，安装后会在 `/etc/supervisor` 生成一个**supervisord.conf**文件和一个**conf.d**目录，我们可以在conf.d目录中建立配置。supervisord.conf文件中已经包含了它。*不能保证使用的环境都是一样的，这里只是我自己的环境。*
 
-
-
 ##### 建立ariaNg 的supervisor配置文件
 
 ```bash
@@ -214,12 +202,12 @@ sudo vi ariaNg.conf
 
 配置文件内容如下
 
-**ariaNg.conf**
+！**ariaNg.conf**
 
 ```ini
 [program:ariaNg]
 command=node server.js
-directory=/home/ariaNg	#配置静态页的目录
+directory=/home/ariaNg  #配置静态页的目录
 user=root
 autorestart=true
 stderr_logfile=/var/log/ariaNg/err.log
@@ -234,8 +222,6 @@ stdout_logfile=/var/log/ariaNg/out.log
 ```bash
 sudo mkdir /var/log/ariaNg
 ```
-
-
 
 启动supervisor服务
 
@@ -296,8 +282,6 @@ aria2c --conf-path=/home/xiaosen/.aria2/aria2.conf
 
 搞定👏👏👏
 
-
-
 ### 最后
 
 这大概就是我安装使用aria2 的整个过程了。
@@ -305,8 +289,6 @@ aria2c --conf-path=/home/xiaosen/.aria2/aria2.conf
 *水平有限，如果某些地方不正确，恳请斧正，感谢！*
 
 ### 参考
-
-
 
 [Aria2 配置详解](https://www.jianshu.com/p/6adf79d29add)
 

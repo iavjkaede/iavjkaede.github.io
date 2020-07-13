@@ -22,4 +22,3 @@ FileExtensionContentTypeProvider fileExtensionContentTypeProvider;
 string contentType;
 fileExtensionContentTypeProvider.TryGetContentType(filename,out contentType);
 ```
-

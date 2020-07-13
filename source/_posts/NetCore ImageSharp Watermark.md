@@ -1,11 +1,11 @@
 ---
 title: NetCore 使用 ImageSharp 为图片添加水印
 date: 2019年5月27日
-categories: 
-	- .NET
+categories:
+    - .NET
 tags: 
     - C#
-	- Image
+    - Image
 cover: https://image.zsver.com/2020/05/23/43208491ef0e8.jpg
 ---
 
@@ -68,7 +68,7 @@ public Stream Watermark(Stream origin, Stream mark, string position, float scale
 
              // 根据position 计算水印位置  
              // position可能的值如下 "left top botom center right"
-             // 这些值可以进行组合 如果同一方向有重复值，后面的会覆盖掉前面的 
+             // 这些值可以进行组合 如果同一方向有重复值，后面的会覆盖掉前面的
              // 按照 中左上右下的顺序处理
              position = position.ToLower();
              Point point = new Point();

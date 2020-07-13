@@ -90,7 +90,7 @@ Plugin1 <- Share
 public void ConfigureServices(IServiceCollection services)
 {
     .....
-        
+
     services.AddMvc().ConfigureApplicationPartManager(manager =>
     {
         string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -106,7 +106,7 @@ public void ConfigureServices(IServiceCollection services)
             });
 
     });
-    
+
     .....
 }
 
@@ -139,7 +139,7 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 
 #### 添加**PluginController.cs**
 
-**PluginController.cs**
+!**PluginController.cs**
 
 ```csharp
 using Microsoft.AspNetCore.Mvc;
@@ -215,7 +215,7 @@ dotnet add .\Plugin1\ package Microsoft.AspNetCore.Mvc
 }
 ```
 
-在VS Code中执行任务**build & install plugin1** 
+在VS Code中执行任务**build & install plugin1**
 
 `ctrl+shift+p`  输入 `run task` 选择 `build & install plugin1`
 
@@ -227,7 +227,7 @@ dotnet add .\Plugin1\ package Microsoft.AspNetCore.Mvc
 
 #### 启动
 
-`F5`启动项目，然后在浏览器输入https://5001/api/plugin/ping。
+`F5`启动项目，然后在浏览器输入 https://5001/api/plugin/ping。
 
 当看到浏览器回复了一个'pong' 之后，意味着，成功了😀。
 
@@ -243,7 +243,7 @@ Plugin1.dll 除了需要响应请求之外，它还需要使用IOC容器进行DI
 
 在VS Code 中新建**IServicesRegister.cs**
 
-**IServicesRegister.cs**
+!**IServicesRegister.cs**
 
 ```csharp
 using Microsoft.Extensions.DependencyInjection;
@@ -273,7 +273,7 @@ dotnet add .\Share\ package Microsoft.Extensions.DependencyInjection
 
 现在在**Startup.cs**中添加一个`RegisterServices`方法（名字是和接口的重复的，这没关系，不要混淆了即可）,或者可以直接`ConfigureServices` 中操作。
 
-**Startup.cs**
+!**Startup.cs**
 
 ```csharp
 ...
@@ -284,7 +284,7 @@ public void ConfigureServices(IServiceCollection services)
     RegisterServices(services);
     ...
 }
-    
+
 public void RegisterServices(IServiceCollection services)
 {
     // 查找dll文件
@@ -300,7 +300,7 @@ public void RegisterServices(IServiceCollection services)
             var instance = Activator.CreateInstance(reg);
             // 方法 保证该接口仅有一个方法的情况下，使用SingleOrDefault，应该用Single。
             var method = typeof(IServicesRegister).GetMethods().SingleOrDefault();
-            
+
             method.Invoke(instance, new object[]
             {
                 services
@@ -326,7 +326,7 @@ public void RegisterServices(IServiceCollection services)
 
 **ServicesRegister.cs** 用来实现注入，**AddService.cs** 将实现 IAddService 接口用来测试。
 
-**ServicesRegister.cs** 
+!**ServicesRegister.cs**
 
 ```csharp
 using System.Diagnostics;
@@ -348,7 +348,7 @@ namespace Plugin1
 }
 ```
 
-**IAddService.cs**
+!**IAddService.cs**
 
 ```csharp
 namespace Plugin1
@@ -360,9 +360,7 @@ namespace Plugin1
 }
 ```
 
-
-
-**AddService.cs**
+!**AddService.cs**
 
 ```csharp
 namespace Plugin1
@@ -376,7 +374,7 @@ namespace Plugin1
 
 最后修改**PluginController.cs** 添加AddService的注入依赖和测试方法。
 
-**PluginController.cs**
+!**PluginController.cs**
 
 ```csharp
 using Microsoft.AspNetCore.Mvc;
@@ -406,7 +404,7 @@ namespace Plugin1
 
 先执行 `build & install plugin1`命令，然后`F5`启动。🚀
 
-一切完成，在浏览器地址栏输入https://localhost:5001/api/plugin/pingservice?a=service&b=done。
+一切完成，在浏览器地址栏输入 https://localhost:5001/api/plugin/pingservice?a=service&b=done。
 
 看看浏览器响应，是否把'service' 和 'done' 拼到一起了呢。
 
@@ -433,7 +431,7 @@ namespace Plugin1
         public void RegisterServices(IServiceCollection services)
         {
             Debug.WriteLine("Register plugin1's services", "info: ");
-			// 路径可以自行配置
+            // 路径可以自行配置
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("plugin1.json", false)
@@ -449,7 +447,7 @@ namespace Plugin1
 
 #### Plugin1Config.cs
 
-**Plugin1Config.cs**
+!**Plugin1Config.cs**
 
 ```csharp
 namespace Plugin1
@@ -476,11 +474,9 @@ namespace Plugin1
 }
 ```
 
-
-
 #### 添加配置文件
 
-**plugin1.json**
+!**plugin1.json**
 
 ```json
 {
@@ -491,10 +487,6 @@ namespace Plugin1
     }
 }
 ```
-
-
-
-
 
 想要成功构建**Plugin1**项目还需要添加以下NuGet包
 
@@ -526,7 +518,7 @@ dotnet add .\Plugin1\ package  Microsoft.Extensions.Options.ConfigurationExtensi
 
 emmm，Controller的代码看起来是这样。
 
-**PluginController.cs**
+!**PluginController.cs**
 
 ```csharp
 using Microsoft.AspNetCore.Mvc;
@@ -555,8 +547,6 @@ namespace Plugin1
 }
 ```
 
-
-
 添加NuGet引用
 
 ```powershell
@@ -565,7 +555,7 @@ dotnet add .\Plugin1\ package  Microsoft.Extensions.Options
 
 ---
 
-#### 启动
+#### 再次启动
 
 现在像之前那样构建项目，在启动项目之前，把**Plugin1**的配置文件**plugin1.json**拷贝到**Host**目录下。
 
@@ -576,8 +566,6 @@ var config = new ConfigurationBuilder()
                 .AddJsonFile("plugin1.json", false)
                 .Build();
 ```
-
-
 
 启动之后，在浏览器地址栏输入https://localhost:5001/api/plugin/pingconfig。
 
@@ -613,7 +601,7 @@ var config = new ConfigurationBuilder()
 
 添加**HostDbContext.cs**
 
-**HostDbContext.cs**
+！**HostDbContext.cs**
 
 ```csharp
 using System;
@@ -629,13 +617,13 @@ namespace Share
     {
         public HostDbContext(DbContextOptions options) : base(options)
         {
- 			
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            
+
             // 依旧是使用反射的方式去完成
             var dllfiles = Directory.GetFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "*.dll");
             Array.ForEach(dllfiles, files =>
@@ -680,7 +668,7 @@ dotnet add .\Share\ package  System.Linq
 
 添加文件 **PluginData.cs**
 
-**PluginData.cs**
+！**PluginData.cs**
 
 ```csharp
 using System.ComponentModel.DataAnnotations.Schema;
@@ -740,13 +728,11 @@ dotnet add .\Plugin1\ package  Microsoft.EntityFrameworkCore
 services.AddDbContext<HostDbContext>();
 ```
 
-
-
 #### 测试数据库上下文
 
 在**PluginController.cs**中进行注入和测试。
 
-**PluginController.cs**
+！**PluginController.cs**
 
 ```csharp
 using System.Collections.Generic;
@@ -796,7 +782,7 @@ dotnet add .\Plugin1\  package  System.Linq
 
 **PluginController** *PingDb* 方法中用`m_dbContext.Set<PluginData>()`这种方法使用HostDbContext，为了方便使用，可以写一个HostDbContext的拓展类。大概像这个样子
 
-**HostDbContextExtensions.cs**
+！**HostDbContextExtensions.cs**
 
 ```csharp
 using Microsoft.EntityFrameworkCore;
@@ -814,7 +800,7 @@ namespace Plugin1
 
 emmm，这次是完结了。
 
-#### 启动
+#### 又又启动
 
 构建插件，然后启动项目。
 
@@ -835,3 +821,7 @@ emmm，这次是完结了。
 还有一点，.NetCore 中已经没有AppDomain的概念了，插件无法实现热插拔。
 
 完结👌。
+
+## 2020年7月14日 更
+
+这个插件实现方式对 .netcore 2.2 还是可以的，对现在来讲，有些过时。
