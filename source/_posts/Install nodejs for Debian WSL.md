@@ -83,8 +83,6 @@ export PATH=$PATH:usr/bin
 source ~/.zshrc
 ```
 
-！*如果你使用的是bash可能不需要添加环境变量这一步*
-
 ## 参考
 
 [Ubuntu/debian系安装nodejs环境](https://www.jianshu.com/p/a480b99741f6)

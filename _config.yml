@@ -3,13 +3,13 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: 归云阁
-subtitle: 御风千万里，终须雀归阁
+title: 雀归
+subtitle: 破风万里行，终有雀归日
 description:
 keywords: 
-author: 潇枫11
+author: 潇枫十一
 language: zh-CN
-timezone:
+
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
@@ -50,7 +50,7 @@ highlight:
 # order_by: Posts order. (Order by date descending by default)
 index_generator:
   path: ''
-  per_page: 5
+  per_page: 15
   order_by: -date
   
 # Category & Tag
@@ -73,7 +73,8 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: Butterfly
+theme: Chic
+
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html

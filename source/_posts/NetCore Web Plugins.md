@@ -11,7 +11,7 @@ cover: https://image.zsver.com/2020/05/23/67597c6252dd0.jpg
 
 ## 前言
 
-为什么使用插件的方式去完成项目？并不是因为这很酷，仅仅是，我们希望项目变得更容易维护，更容易拓展，彼此之间的依赖更清晰更简单。使用插件，我们可以在不影响现有功能情况下去开发新的功能，随意替换现有的功能模块，连重新编译都不需要。看起来确实挺酷，这么酷的功能，在C#中实现起来却并不复杂。嗯，那就分享一下我在.NetCore 项目中使用插件的方式。
+为什么使用插件的方式去完成项目？并不是因为这很酷，仅仅是，我们希望降低代码的耦合度，让项目变得更容易维护，更容易拓展，彼此之间的依赖更清晰更简单。使用插件，我们可以在不影响现有功能情况下去开发新的功能，随意替换现有的功能模块，而不需要重新构建整个项目。看起来确实挺酷，这么酷的功能，在C#中实现起来却并不复杂。嗯，那就分享一下我在.NetCore 项目中使用插件的方式。
 
 ## 环境简介
 
@@ -129,7 +129,7 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 
 ```
 
-'*.dll' 可以用如 *.plugin.dll 这样的字符串代替，取一个插件命名规则。最好把这个规则放在配置文件中。
+'\*.dll' 可以用如 '\*.plugin.dll' 这样的字符串代替，取一个插件命名规则。最好把这个规则放在配置文件中。
 
 接下来编写一个Controller进行测试。
 
@@ -227,7 +227,7 @@ dotnet add .\Plugin1\ package Microsoft.AspNetCore.Mvc
 
 #### 启动
 
-`F5`启动项目，然后在浏览器输入 https://5001/api/plugin/ping。
+`F5`启动项目，然后在浏览器输入 [https://5001/api/plugin/ping](https://5001/api/plugin/ping)。
 
 当看到浏览器回复了一个'pong' 之后，意味着，成功了😀。
 
@@ -400,11 +400,11 @@ namespace Plugin1
 
 ---
 
-#### 启动
+#### 启动项目
 
 先执行 `build & install plugin1`命令，然后`F5`启动。🚀
 
-一切完成，在浏览器地址栏输入 https://localhost:5001/api/plugin/pingservice?a=service&b=done。
+一切完成，在浏览器地址栏输入 [https://localhost:5001/api/plugin/pingservice?a=service&b=done](https://localhost:5001/api/plugin/pingservice?a=service&b=done)。
 
 看看浏览器响应，是否把'service' 和 'done' 拼到一起了呢。
 
@@ -567,7 +567,7 @@ var config = new ConfigurationBuilder()
                 .Build();
 ```
 
-启动之后，在浏览器地址栏输入https://localhost:5001/api/plugin/pingconfig。
+启动之后，在浏览器地址栏输入[https://localhost:5001/api/plugin/pingconfig](https://localhost:5001/api/plugin/pingconfig)。
 
 看看有没有正常读取到配置。🙂
 
@@ -716,8 +716,6 @@ namespace Plugin1
 dotnet add .\Plugin1\ package  Microsoft.EntityFrameworkCore
 ```
 
-
-
 #### 注入数据库上下文
 
 项目 -- **Host**
@@ -804,7 +802,7 @@ emmm，这次是完结了。
 
 构建插件，然后启动项目。
 
-在浏览器地址栏输入https://localhost:5001/api/plugin/pingdb。
+在浏览器地址栏输入[https://localhost:5001/api/plugin/pingdb](https://localhost:5001/api/plugin/pingdb)。
 怎么样，有结果了吗？👀
 
 ## 最后

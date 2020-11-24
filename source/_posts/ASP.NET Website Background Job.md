@@ -12,13 +12,13 @@ cover: https://image.zsver.com/2020/05/23/5f1cb7c259843.jpg
 
 ## 前言
 
-&emsp;&emsp;可能有这样一个需求，我们希望网站后台每隔一段时间自动执行某些任务。然而在网站部署到IIS上的情况下，由于IIS应用程序池自动回收的原因，导致任务中断，无法一直保持后台运行。
+&emsp;&emsp;在 ASP.NET 网站开发中，可能存在这样一个需求，我们希望网站后台能够每隔一段时间自动地执行某些任务，用定时器之类技术实现这个功能并不困难，但是在网站部署到IIS上的情况下，由于IIS应用程序池自动回收的原因，导致任务在IIS回收后中断，无法持续后台运行。
 
-​现在，我们来找出一个解决方法。嗯。
+​现在，我们就解决这个问题。
 
 ## 环境简介
 
-这里是我在做这件事情时的一个部署和开发所使用的环境。
+这里是我当前的开发和部署所使用的环境。
 
 ### 系统环境
 
@@ -72,17 +72,19 @@ public class JobManager
 
 [Timer Class](https://docs.microsoft.com/zh-cn/dotnet/api/system.threading.timer?f1url=https%3A%2F%2Fmsdn.microsoft.com%2Fquery%2Fdev15.query%3FappId%3DDev15IDEF1%26l%3DZH-CN%26k%3Dk(System.Threading.Timer);k(TargetFrameworkMoniker-.NETFramework,Version%3Dv4.6.2);k(DevLang-csharp)%26rd%3Dtrue&view=netframework-4.8)
 
-**这样实现的任务有个致命缺陷，IIS 应用程序池自动回收的时候会毫不留情的将其摧毁。**
+**前言提到过，单单这样实现的任务并不能保证后台执行，IIS 应用程序池自动回收的时候会毫不留情的将其摧毁。**
 
 下面有两种异曲同工的解决方式。
 
 ---
 
-### Application_End 中唤醒 IIS
+### 1.Application_End 中唤醒 IIS
 
-​应用程序池进行回收的时候会调用*Application_End* 方法，所以，在这里继续将IIS唤醒即可。  
+​&emsp;&emsp;IIS的应用程序池进行回收的时候会调用*Application_End* 方法，有了这个条件，我们便可以在*Application_End*方法中做些文章了。
+怎么做呢，我们只简单的访问一下自己的网就好了。  
+IIS 想休息，因为觉得没人拜访了，那我们就登门拜访。
 
-​我把关键的代码放在这里
+​关键代码如下所示
 
 ！**Global.asax.cs**
 
@@ -90,6 +92,7 @@ public class JobManager
 protected async void Application_End(object sender,EventArgs e)
 {
     // 从这里唤醒你的网站，所以我们需要得到网站的地址
+    // TODO: 网址不要使用硬编码表示
     string url = "http://www.yousite.com";
     try{
           using(HttpClient client = new HttpClient())
@@ -98,18 +101,18 @@ protected async void Application_End(object sender,EventArgs e)
           }
     }catch(Exception)
     {
-        // 处理可能出现的异常
+        // TODO: 处理可能出现的异常
     }
 }
 ```
 
-可能还需要写个日志来记录情况或者用*HttpWebRequest*来发起请求，都没问题。
+可能还需要写个日志来记录情况或者用*HttpWebRequest*来发起请求，都取决与聪明的你。
 
-我们来看下一种方式。
+来看下一种方式。
 
 ---
 
-### IRegisteredObject 唤醒IIS
+### 2.IRegisteredObject 唤醒IIS
 
 #### IRegisteredObject 接口
 
@@ -130,9 +133,7 @@ public interface IRegisteredObject
 
 *当应用程序管理器需要停止已注册的对象时，它将调用[Stop](https://docs.microsoft.com/zh-cn/dotnet/api/system.web.hosting.iregisteredobject.stop?view=netframework-4.8)方法*
 
-是的，很抽象，反正这个描述我是看不懂。
-
-简单说一下，就是**应用程序池将要回收的时候，会调用Stop方法**，那么我们可以在Stop中实现上面同样的逻辑。
+简而言之，就是**应用程序池将要回收的时候，会调用Stop方法**，那么我们可以在*Stop*方法中实现与上面同样的逻辑。
 
 ---
 
@@ -155,11 +156,11 @@ public class JobHost:IRegisteredObject
 }
 ```
 
-在使用JobHost 之前需要调用
+在使用 *JobHost* 之前需要调用
 
 `HostingEnvironment.RegisterObject(this);` 进行注册
 
-在Stop 被调用时  要调用
+在 *Stop* 方法被调用时调用
 
 `HostingEnvironment.UnregisterObject(this);` 进行反注册
 
@@ -167,7 +168,7 @@ public class JobHost:IRegisteredObject
 
 ### 完整代码
 
-通过第二种解决方式实现后台任务的完整代码
+通过第二种方式实现后台任务的完整代码
 
 #### JobHost.cs
 
@@ -179,9 +180,11 @@ class JobHost : IRegisteredObject
 
     public JobHost ()
     {
+        // 注册对象
         HostingEnvironment.RegisterObject (this);
     }
 
+    // IIS进行回收时调用
     public void Stop (bool immediate)
     {
         lock (m_lock)
@@ -192,16 +195,6 @@ class JobHost : IRegisteredObject
 
         // 程序池被回收的时候重新唤醒iis
         JobManager.Wakeup ();
-    }
-
-    public void DoWork (Action work)
-    {
-        lock (m_lock)
-        {
-            if (m_shuttingDown)
-                return;
-            work ();
-        }
     }
 
 }
@@ -245,14 +238,16 @@ public class JobManager
 
         }catch(Exception)
         {
-            // 处理可能出现的异常
+            //TODO 处理可能出现的异常
         }
     }
 
 }
 ```
 
-我这里讲的不够详细，如果要参考更多细节，这里贴出参考的blog
+我这里说的可能不太详尽，如果想要参考更多细节，这里贴出参考的blog
+
+## 引用
 
 [The Dangers of Implementing Recurring Background Tasks In ASP.NET](https://haacked.com/archive/2011/10/16/the-dangers-of-implementing-recurring-background-tasks-in-asp-net.aspx/)
 
@@ -260,13 +255,13 @@ public class JobManager
 
 ## 最后
 
-​这种方式的原理很简单，IIS就像个贪睡的孩子，当他快要打瞌睡的时候，你就拍拍他的脑袋。
+​这个方法很简单，IIS总觉得当没人访问站点的时候，它就应该减少该站点的资源占用。
+    抱歉
+   “我不要你觉得，我要我觉得 。”
 
-   “ 喂，臭弟弟，起来写作业了。”
+   没错，不要偷懒。
 
-   没错，就是这么残酷😂。
-
-！**当我们需要持续稳定的执行后台任务的时候，更好的方式应该是写一个服务程序，或者控制台**
+！**当我们需要持续稳定的执行后台任务的时候，更好的方式应该是写一个服务程序，或者控制台也可以**
 
 ## 参考
 
