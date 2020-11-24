@@ -1,118 +1,168 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>归云阁 - 御风千万里，终须雀归阁</title><meta name="description"><meta name="author" content="潇枫11"><meta name="copyright" content="潇枫11"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.png"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="dns-prefetch" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="crossorigin"/><link rel="dns-prefetch" href="https://fonts.googleapis.com"/><meta name="twitter:card" content="summary"><meta name="twitter:title" content="归云阁"><meta name="twitter:description"><meta name="twitter:image" content="http://blog.iavjkaede.com/img/avatar.jpg"><meta property="og:type" content="website"><meta property="og:title" content="归云阁"><meta property="og:url" content="http://blog.iavjkaede.com/"><meta property="og:site_name" content="归云阁"><meta property="og:description"><meta property="og:image" content="http://blog.iavjkaede.com/img/avatar.jpg"><meta property="article:published_time" content="2020-07-13T16:39:01.285Z"><meta property="article:modified_time" content="2020-07-13T16:39:01.285Z"><script src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js"></script><script>var autoChangeMode = '1'
-var t = Cookies.get("theme")
-if (autoChangeMode == '1'){
-  var isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
-  var isLightMode = window.matchMedia("(prefers-color-scheme: light)").matches
-  var isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
-  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-  if (t === undefined){
-    if (isLightMode) activateLightMode()
-    else if (isDarkMode) activateDarkMode()
-    else if (isNotSpecified || hasNoSupport){
-      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
-      var now = new Date()
-      var hour = now.getHours()
-      var isNight = hour < 6 || hour >= 18
-      isNight ? activateDarkMode() : activateLightMode()
-  }
-  } else if (t == 'light') activateLightMode()
-  else activateDarkMode()
+    <meta name="author" content="潇枫十一">
 
-} else if (autoChangeMode == '2'){
-  now = new Date();
-  hour = now.getHours();
-  isNight = hour < 6 || hour >= 18
-  if(t === undefined) isNight? activateDarkMode() : activateLightMode()
-  else if (t === 'light') activateLightMode()
-  else activateDarkMode() 
-} else {
-  if ( t == 'dark' ) activateDarkMode()
-  else if ( t == 'light') activateLightMode()
-}
 
-function activateDarkMode(){
-  document.documentElement.setAttribute('data-theme', 'dark')
-  if (document.querySelector('meta[name="theme-color"]') !== null){
-    document.querySelector('meta[name="theme-color"]').setAttribute('content','#000')
-  }
-}
-function activateLightMode(){
-  document.documentElement.setAttribute('data-theme', 'light')
-  if (document.querySelector('meta[name="theme-color"]') !== null){
-  document.querySelector('meta[name="theme-color"]').setAttribute('content','#fff')
-  }
-}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="canonical" href="http://blog.iavjkaede.com/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web"><script>var GLOBAL_CONFIG = { 
-  root: '/',
-  algolia: undefined,
-  localSearch: undefined,
-  translate: undefined,
-  copy: {
-    success: '复制成功',
-    error: '复制错误',
-    noSupport: '浏览器不支持'
-  },
-  bookmark: {
-    message_prev: '按',
-    message_next: '键将本页加入书签'
-  },
-  runtime_unit: '天',
-  runtime: false,
-  copyright: undefined,
-  ClickShowText: undefined,
-  medium_zoom: true,
-  fancybox: true,
-  Snackbar: undefined,
-  baiduPush: false,
-  highlightCopy: true,
-  highlightLang: true,
-  highlightShrink: 'false',
-  isFontAwesomeV5: true,
-  isPhotoFigcaption: false,
-  islazyload: true,
-  isanchor: false
-  
-}</script><script>var GLOBAL_CONFIG_SITE = { 
-  isPost: false,
-  isHome: true,
-  isSidebar: false  
-  }</script><noscript><style>
-#page-header {
-  opacity: 1
-}
-.justified-gallery img{
-  opacity: 1
-}
-</style></noscript><meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="归云阁" type="application/atom+xml">
-</head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">10</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">16</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">2</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 归云</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 御风</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 忘尘</span></a></div></div></div></div><div id="body-wrap"><div class="full_page" id="nav" style="background-image: url(https://image.zsver.com/2020/05/22/6fb1141254567.jpg)"><div id="page-header"><span class="pull_left" id="blog_name"><a class="blog_title" id="site-name" href="/">归云阁</a></span><span class="pull_right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 归云</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 御风</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 忘尘</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fa fa-bars fa-fw" aria-hidden="true"></i></a></span></span></div><div id="site-info"><h1 id="site_title">归云阁</h1><div id="site_subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="https://github.com/iavjkaede" target="_blank" title="Github"><i class="fa fa-github" aria-hidden="true"></i></a><a class="social-icon" href="xiaosen234@outlook.com" target="_blank" title="Email"><i class="fa fa-envelope" aria-hidden="true"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss" aria-hidden="true"></i></a></div></div><div id="scroll_down"><i class="fa fa-angle-down scroll-down-effects"></i></div></div><main class="layout_page" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2020/07/13/WPF%20Prism%207%20with%20MS%20DI/" title="WPF Prism 7 中使用基于MS DI 的Services">WPF Prism 7 中使用基于MS DI 的Services</a><div class="article-meta-wrap"><time class="post-meta__date" title="发表于 2020-07-13 19:39:36"><i class="fa fa-calendar" aria-hidden="true"></i>2020-07-13</time><span class="article-meta"><span class="article-meta__separator">|</span><i class="fa fa-inbox article-meta__icon" aria-hidden="true"></i><a class="article-meta__categories" href="/categories/NET/">.NET</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/C/">C#</a><span class="article-meta__link">-</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/Prism/">Prism</a><span class="article-meta__link">-</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/WPF/">WPF</a><span class="article-meta__link">-</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/IOC/">IOC</a></span></div><div class="content">Prism 是基于WPF 界面技术的MVVM应用框架，框架里集成了IOC容器，默认可以选择的是Unity和DryIoc，不过这两个项目小可所知甚少，Unity存在的时间比较长了，而DryIoc，接触Prism方才知道，github上star 也比较少，可能是后起之秀？这里便使用DryIoc 了，只因 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2020/06/21/Create%20native%20service%20with%20dotnet/" title="基于netcore 编写本地服务">基于netcore 编写本地服务</a><div class="article-meta-wrap"><time class="post-meta__date" title="发表于 2020-06-21 21:19:43"><i class="fa fa-calendar" aria-hidden="true"></i>2020-06-21</time><span class="article-meta"><span class="article-meta__separator">|</span><i class="fa fa-inbox article-meta__icon" aria-hidden="true"></i><a class="article-meta__categories" href="/categories/NET/">.NET</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/C/">C#</a><span class="article-meta__link">-</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/Service/">Service</a></span></div><div class="content">服务程序，一般代表一些需要长期稳定运行，没有界面交互的程序，周而复始，生生不息。那么,怎么用.netcore 来编织这么一个程序呢？
-利器以下是在下所使用的工具
+    <meta name="subtitle" content="破风万里行，终有雀归日">
 
-VisualStduio 2019
-.netcore 3.1
 
-起始道生一 | 使用Woker Service 模板创建服务启动Visu ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2020/05/18/Install%20Aria2%20for%20Debian%20WSL/" title="Linux子系统（WSL）Debian安装aria2并配置AriaNg">Linux子系统（WSL）Debian安装aria2并配置AriaNg</a><div class="article-meta-wrap"><time class="post-meta__date" title="发表于 2020-05-18 23:22:37"><i class="fa fa-calendar" aria-hidden="true"></i>2020-05-18</time><span class="article-meta"><span class="article-meta__separator">|</span><i class="fa fa-inbox article-meta__icon" aria-hidden="true"></i><a class="article-meta__categories" href="/categories/Deploy/">Deploy</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/WSL/">WSL</a><span class="article-meta__link">-</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/Aria2/">Aria2</a><span class="article-meta__link">-</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/Debian/">Debian</a></span></div><div class="content">环境简介系统环境Window 10 LTSC 2019  开启WSL
-WSL 使用 Debian 发行版
-Shell 环境ZSH
-将安装的软件版本aria2    版本 1.30.0
-AriaNg 版本 1.1.1
-开始安装aria2首先进行aria2 的安装
-1sudo apt install a ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2020/05/18/Install%20nodejs%20for%20Debian%20WSL/" title="Linux子系统（WSL）Debian安装Nodejs">Linux子系统（WSL）Debian安装Nodejs</a><div class="article-meta-wrap"><time class="post-meta__date" title="发表于 2020-05-18 23:22:37"><i class="fa fa-calendar" aria-hidden="true"></i>2020-05-18</time><span class="article-meta"><span class="article-meta__separator">|</span><i class="fa fa-inbox article-meta__icon" aria-hidden="true"></i><a class="article-meta__categories" href="/categories/Deploy/">Deploy</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/WSL/">WSL</a><span class="article-meta__link">-</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/Debian/">Debian</a><span class="article-meta__link">-</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/Npm/">Npm</a><span class="article-meta__link">-</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/Nodejs/">Nodejs</a></span></div><div class="content">环境简介系统环境Windows 10 LTSC 2019
-！已安装 Nodejs
-！已开启 WSL
-WSL ：Debian 发行版
-Shell 环境ZSH
-安装Nodejs12curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash  ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2020/05/18/NetCore%20ImageSharp%20Watermark/" title="NetCore 使用 ImageSharp 为图片添加水印">NetCore 使用 ImageSharp 为图片添加水印</a><div class="article-meta-wrap"><time class="post-meta__date" title="发表于 2020-05-18 23:22:37"><i class="fa fa-calendar" aria-hidden="true"></i>2020-05-18</time><span class="article-meta"><span class="article-meta__separator">|</span><i class="fa fa-inbox article-meta__icon" aria-hidden="true"></i><a class="article-meta__categories" href="/categories/NET/">.NET</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/C/">C#</a><span class="article-meta__link">-</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/Image/">Image</a></span></div><div class="content">环境简介系统环境Windows10 1903
-.NetCore SDK 版本.NetCore 2.2
-ImageSharp 版本SixLabors.ImageSharp  1.0.0-beta0006
-1.安装ImageSharp Nuget 包我写这篇博客时，ImageSharp还没有一个正式的发 ...</div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-fw fa-chevron-right" aria-hidden="true"></i></a></div></nav></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">潇枫11</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives"><div class="headline">文章</div><div class="length_num">10</div></a></div><div class="card-info-data-item is-center">      <a href="/tags"><div class="headline">标签</div><div class="length_num">16</div></a></div><div class="card-info-data-item is-center">     <a href="/categories"><div class="headline">分类</div><div class="length_num">2</div></a></div></div><div class="card-info-bookmark is-center"><a class="bookmark button--primary button--animated" id="bookmark-it" href="javascript:;" title="加入书签" target="_self"><i class="fa fa-bookmark" aria-hidden="true"></i><span>加入书签</span></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/iavjkaede" target="_blank" title="Github"><i class="fa fa-github" aria-hidden="true"></i></a><a class="social-icon" href="xiaosen234@outlook.com" target="_blank" title="Email"><i class="fa fa-envelope" aria-hidden="true"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss" aria-hidden="true"></i></a></div></div></div><div class="card-widget card-archives"><div class="card-content"><div class="item-headline"><i class="fa fa-archive" aria-hidden="true"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/07/"><span class="card-archive-list-date">七月 2020</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/06/"><span class="card-archive-list-date">六月 2020</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/05/"><span class="card-archive-list-date">五月 2020</span><span class="card-archive-list-count">5</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/06/"><span class="card-archive-list-date">六月 2019</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/03/"><span class="card-archive-list-date">三月 2019</span><span class="card-archive-list-count">2</span></a></li></ul></div></div></div></main><footer id="footer" style="background-image: url(https://image.zsver.com/2020/05/22/6fb1141254567.jpg)" data-type="photo"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2020 By 潇枫11</div><div class="framework-info"><span>Power by </span><a href="https://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><i class="darkmode far fa-moon" id="darkmode" title="夜间模式"></i></div><div id="rightside-config-show"><div id="rightside_config" title="设置"><i class="fa fa-cog" aria-hidden="true"></i></div><i class="fa fa-arrow-up" id="go-up" title="回到顶部" aria-hidden="true"></i></div></section><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@latest/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script><script src="https://cdn.jsdelivr.net/npm/typed.js"></script><script>var subtitleEffect = true
-if (subtitleEffect) { 
-  var typed = new Typed("#subtitle", {
-    strings: '醉卧美人膝，醒握杀人剑,不求连城璧，但求杀人权'.split(","),
-    startDelay: 300,
-    typeSpeed: 150,
-    loop: true,
-    backSpeed: 50
-  })
-} else {
-  document.getElementById("subtitle").innerHTML = '醉卧美人膝，醒握杀人剑'
-}</script></body></html>
+
+
+<title>雀归</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="雀归" type="application/atom+xml">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">雀归</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">雀归</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            
+    <div class="container">
+    <div class="intro">
+        <div class="avatar">
+            <a href="/archives"><img src="/image/avatar.jpg"></a>
+        </div>
+        <div class="nickname">潇枫十一</div>
+        <div class="description"><p>岁月不堪数 故人不知处 最是人间留不住 </br> 只往事还如 青丝缠梳 无端把韶光负  </br> &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; —-《烟笼长安》</br></p>
+</div>
+        <div class="links">
+            
+                
+                    <a class="link-item" title="Blog" href="/archives">
+                        
+                        
+                            <i class="iconfont icon-blog"></i>
+                        
+                    </a>
+                
+                    <a class="link-item" title="Category" href="/categories">
+                        
+                        
+                            <i class="iconfont icon-category"></i>
+                        
+                    </a>
+                
+                    <a class="link-item" title="RSS" href="atom.xml">
+                        
+                        
+                            <i class="iconfont icon-rss"></i>
+                        
+                    </a>
+                
+                    <a class="link-item" title="Github" href="https://github.com/iavjkaede" target="_blank" rel="noopener">
+                        
+                        
+                            <i class="iconfont icon-github"></i>
+                        
+                    </a>
+                
+            
+        </div>
+
+        <iframe style="position:absolute;transform:translate(-50%,30px);left:50%" frameborder="no" border="0"
+            marginwidth="0" marginheight="0" width=280 height=110
+            src="//music.163.com/outchain/player?type=0&id=5348803898&auto=1&height=90"></iframe>
+        
+    </div>
+</div>
+
+
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© 潇枫十一 | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+    
+</body>
+</html>

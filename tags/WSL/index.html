@@ -1,87 +1,161 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>标签: WSL | 归云阁</title><meta name="description"><meta name="author" content="潇枫11"><meta name="copyright" content="潇枫11"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.png"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="dns-prefetch" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="crossorigin"/><link rel="dns-prefetch" href="https://fonts.googleapis.com"/><meta name="twitter:card" content="summary"><meta name="twitter:title" content="标签: WSL"><meta name="twitter:description"><meta name="twitter:image" content="http://blog.iavjkaede.com/img/avatar.jpg"><meta property="og:type" content="website"><meta property="og:title" content="标签: WSL"><meta property="og:url" content="http://blog.iavjkaede.com/tags/WSL/"><meta property="og:site_name" content="归云阁"><meta property="og:description"><meta property="og:image" content="http://blog.iavjkaede.com/img/avatar.jpg"><meta property="article:published_time" content="2020-07-13T16:39:01.273Z"><meta property="article:modified_time" content="2020-07-13T16:39:01.273Z"><script src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js"></script><script>var autoChangeMode = '1'
-var t = Cookies.get("theme")
-if (autoChangeMode == '1'){
-  var isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
-  var isLightMode = window.matchMedia("(prefers-color-scheme: light)").matches
-  var isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
-  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-  if (t === undefined){
-    if (isLightMode) activateLightMode()
-    else if (isDarkMode) activateDarkMode()
-    else if (isNotSpecified || hasNoSupport){
-      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
-      var now = new Date()
-      var hour = now.getHours()
-      var isNight = hour < 6 || hour >= 18
-      isNight ? activateDarkMode() : activateLightMode()
-  }
-  } else if (t == 'light') activateLightMode()
-  else activateDarkMode()
+    <meta name="author" content="潇枫十一">
 
-} else if (autoChangeMode == '2'){
-  now = new Date();
-  hour = now.getHours();
-  isNight = hour < 6 || hour >= 18
-  if(t === undefined) isNight? activateDarkMode() : activateLightMode()
-  else if (t === 'light') activateLightMode()
-  else activateDarkMode() 
-} else {
-  if ( t == 'dark' ) activateDarkMode()
-  else if ( t == 'light') activateLightMode()
-}
 
-function activateDarkMode(){
-  document.documentElement.setAttribute('data-theme', 'dark')
-  if (document.querySelector('meta[name="theme-color"]') !== null){
-    document.querySelector('meta[name="theme-color"]').setAttribute('content','#000')
-  }
-}
-function activateLightMode(){
-  document.documentElement.setAttribute('data-theme', 'light')
-  if (document.querySelector('meta[name="theme-color"]') !== null){
-  document.querySelector('meta[name="theme-color"]').setAttribute('content','#fff')
-  }
-}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="canonical" href="http://blog.iavjkaede.com/tags/WSL/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web"><script>var GLOBAL_CONFIG = { 
-  root: '/',
-  algolia: undefined,
-  localSearch: undefined,
-  translate: undefined,
-  copy: {
-    success: '复制成功',
-    error: '复制错误',
-    noSupport: '浏览器不支持'
-  },
-  bookmark: {
-    message_prev: '按',
-    message_next: '键将本页加入书签'
-  },
-  runtime_unit: '天',
-  runtime: false,
-  copyright: undefined,
-  ClickShowText: undefined,
-  medium_zoom: true,
-  fancybox: true,
-  Snackbar: undefined,
-  baiduPush: false,
-  highlightCopy: true,
-  highlightLang: true,
-  highlightShrink: 'false',
-  isFontAwesomeV5: true,
-  isPhotoFigcaption: false,
-  islazyload: true,
-  isanchor: false
-  
-}</script><script>var GLOBAL_CONFIG_SITE = { 
-  isPost: false,
-  isHome: false,
-  isSidebar: false  
-  }</script><noscript><style>
-#page-header {
-  opacity: 1
-}
-.justified-gallery img{
-  opacity: 1
-}
-</style></noscript><meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="归云阁" type="application/atom+xml">
-</head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">10</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">16</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">2</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 归云</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 御风</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 忘尘</span></a></div></div></div></div><div id="body-wrap"><div class="not-index-bg" id="nav" style="background-image: url(https://image.zsver.com/2020/05/22/3401abd166861.jpg)"><div id="page-header"><span class="pull_left" id="blog_name"><a class="blog_title" id="site-name" href="/">归云阁</a></span><span class="pull_right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 归云</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 御风</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 忘尘</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fa fa-bars fa-fw" aria-hidden="true"></i></a></span></span></div><div id="page_site-info"><h1 id="site_title">WSL</h1></div></div><main class="layout_page" id="content-inner"><div id="tag"><div class="article-sort-title">标签 - WSL</div><div class="article-sort"><div class="article-sort-item year">2020</div><div class="article-sort-item"><div class="article-sort-img"><a class="article-sort-item__img" href="/2020/05/18/Install%20Aria2%20for%20Debian%20WSL/"><img src="https://image.zsver.com/2020/05/23/ff71252584474.jpg" alt="Linux子系统（WSL）Debian安装aria2并配置AriaNg" onerror="this.onerror=null;this.src='/img/404.jpg'"></a></div><div class="article-sort-post"><a class="article-sort-item__post" href="/2020/05/18/Install%20Aria2%20for%20Debian%20WSL/"><i class="fa fa-clock-o" aria-hidden="true"></i><time class="article-sort-item__time" title="发表于 2020-05-18 23:22:37">2020-05-18</time><div class="article-sort-item__title">Linux子系统（WSL）Debian安装aria2并配置AriaNg</div></a></div></div><div class="article-sort-item"><div class="article-sort-img"><a class="article-sort-item__img" href="/2020/05/18/Install%20nodejs%20for%20Debian%20WSL/"><img src="https://image.zsver.com/2020/05/23/9c88d021ce36d.jpg" alt="Linux子系统（WSL）Debian安装Nodejs" onerror="this.onerror=null;this.src='/img/404.jpg'"></a></div><div class="article-sort-post"><a class="article-sort-item__post" href="/2020/05/18/Install%20nodejs%20for%20Debian%20WSL/"><i class="fa fa-clock-o" aria-hidden="true"></i><time class="article-sort-item__time" title="发表于 2020-05-18 23:22:37">2020-05-18</time><div class="article-sort-item__title">Linux子系统（WSL）Debian安装Nodejs</div></a></div></div><div class="article-sort-item year">2019</div><div class="article-sort-item"><div class="article-sort-img"><a class="article-sort-item__img" href="/2019/03/02/WSL%20Service%20Autostart/"><img src="https://image.zsver.com/2020/05/23/6a7691490d5dc.jpg" alt="Linux子系统(WSL)中的服务开机启动" onerror="this.onerror=null;this.src='/img/404.jpg'"></a></div><div class="article-sort-post"><a class="article-sort-item__post" href="/2019/03/02/WSL%20Service%20Autostart/"><i class="fa fa-clock-o" aria-hidden="true"></i><time class="article-sort-item__time" title="发表于 2019-03-02 12:24:00">2019-03-02</time><div class="article-sort-item__title">Linux子系统(WSL)中的服务开机启动</div></a></div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span></div></nav></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">潇枫11</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives"><div class="headline">文章</div><div class="length_num">10</div></a></div><div class="card-info-data-item is-center">      <a href="/tags"><div class="headline">标签</div><div class="length_num">16</div></a></div><div class="card-info-data-item is-center">     <a href="/categories"><div class="headline">分类</div><div class="length_num">2</div></a></div></div><div class="card-info-bookmark is-center"><a class="bookmark button--primary button--animated" id="bookmark-it" href="javascript:;" title="加入书签" target="_self"><i class="fa fa-bookmark" aria-hidden="true"></i><span>加入书签</span></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/iavjkaede" target="_blank" title="Github"><i class="fa fa-github" aria-hidden="true"></i></a><a class="social-icon" href="xiaosen234@outlook.com" target="_blank" title="Email"><i class="fa fa-envelope" aria-hidden="true"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss" aria-hidden="true"></i></a></div></div></div><div class="card-widget card-archives"><div class="card-content"><div class="item-headline"><i class="fa fa-archive" aria-hidden="true"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/07/"><span class="card-archive-list-date">七月 2020</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/06/"><span class="card-archive-list-date">六月 2020</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/05/"><span class="card-archive-list-date">五月 2020</span><span class="card-archive-list-count">5</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/06/"><span class="card-archive-list-date">六月 2019</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/03/"><span class="card-archive-list-date">三月 2019</span><span class="card-archive-list-count">2</span></a></li></ul></div></div></div></main><footer id="footer" style="background-image: url(https://image.zsver.com/2020/05/22/3401abd166861.jpg)" data-type="photo"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2020 By 潇枫11</div><div class="framework-info"><span>Power by </span><a href="https://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><i class="darkmode far fa-moon" id="darkmode" title="夜间模式"></i></div><div id="rightside-config-show"><div id="rightside_config" title="设置"><i class="fa fa-cog" aria-hidden="true"></i></div><i class="fa fa-arrow-up" id="go-up" title="回到顶部" aria-hidden="true"></i></div></section><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@latest/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script></body></html>
+    <meta name="subtitle" content="破风万里行，终有雀归日">
+
+
+
+
+<title>Tag: WSL | 雀归</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="雀归" type="application/atom+xml">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">雀归</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">雀归</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            
+
+    
+<div class="container">
+    <div class="post-wrap tags">
+        <h2 class="post-title">-&nbsp;Tag&nbsp;·&nbsp;WSL-</h2>
+    </div>
+    <div class="post-wrap archive">
+    
+    
+        
+
+        
+            <h3>2020</h3>
+        
+
+        <article class="archive-item">
+            <a class="archive-item-link" href="/2020/05/18/Install%20Aria2%20for%20Debian%20WSL/">Linux子系统（WSL）Debian安装aria2并配置AriaNg</a>
+            <span class="archive-item-date">五月 18, 2020</span>
+        </article>
+    
+        
+
+        
+
+        <article class="archive-item">
+            <a class="archive-item-link" href="/2020/05/18/Install%20nodejs%20for%20Debian%20WSL/">Linux子系统（WSL）Debian安装Nodejs</a>
+            <span class="archive-item-date">五月 18, 2020</span>
+        </article>
+    
+        
+
+        
+            <h3>2019</h3>
+        
+
+        <article class="archive-item">
+            <a class="archive-item-link" href="/2019/03/02/WSL%20Service%20Autostart/">Linux子系统(WSL)中的服务开机启动</a>
+            <span class="archive-item-date">三月 2, 2019</span>
+        </article>
+    
+    
+</div>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© 潇枫十一 | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+    
+</body>
+</html>

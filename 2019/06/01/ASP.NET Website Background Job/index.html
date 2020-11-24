@@ -1,92 +1,205 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ASP.NET 之 IIS托管的后台任务 | 归云阁</title><meta name="description" content="前言&amp;emsp;&amp;emsp;可能有这样一个需求，我们希望网站后台每隔一段时间自动执行某些任务。然而在网站部署到IIS上的情况下，由于IIS应用程序池自动回收的原因，导致任务中断，无法一直保持后台运行。 ​现在，我们来找出一个解决方法。嗯。 环境简介这里是我在做这件事情时的一个部署和开发所使用的环境。 系统环境Windows 10 1903 开发环境工具：Visual Studio 2019 SDK"><meta name="keywords" content="IIS,Background Task,C#"><meta name="author" content="潇枫11"><meta name="copyright" content="潇枫11"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.png"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="dns-prefetch" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="crossorigin"/><link rel="dns-prefetch" href="https://fonts.googleapis.com"/><meta name="twitter:card" content="summary"><meta name="twitter:title" content="ASP.NET 之 IIS托管的后台任务"><meta name="twitter:description" content="前言&amp;emsp;&amp;emsp;可能有这样一个需求，我们希望网站后台每隔一段时间自动执行某些任务。然而在网站部署到IIS上的情况下，由于IIS应用程序池自动回收的原因，导致任务中断，无法一直保持后台运行。 ​现在，我们来找出一个解决方法。嗯。 环境简介这里是我在做这件事情时的一个部署和开发所使用的环境。 系统环境Windows 10 1903 开发环境工具：Visual Studio 2019 SDK"><meta name="twitter:image" content="https://image.zsver.com/2020/05/23/5f1cb7c259843.jpg"><meta property="og:type" content="article"><meta property="og:title" content="ASP.NET 之 IIS托管的后台任务"><meta property="og:url" content="http://blog.iavjkaede.com/2019/06/01/ASP.NET%20Website%20Background%20Job/"><meta property="og:site_name" content="归云阁"><meta property="og:description" content="前言&amp;emsp;&amp;emsp;可能有这样一个需求，我们希望网站后台每隔一段时间自动执行某些任务。然而在网站部署到IIS上的情况下，由于IIS应用程序池自动回收的原因，导致任务中断，无法一直保持后台运行。 ​现在，我们来找出一个解决方法。嗯。 环境简介这里是我在做这件事情时的一个部署和开发所使用的环境。 系统环境Windows 10 1903 开发环境工具：Visual Studio 2019 SDK"><meta property="og:image" content="https://image.zsver.com/2020/05/23/5f1cb7c259843.jpg"><meta property="article:published_time" content="2019-06-01T04:39:00.000Z"><meta property="article:modified_time" content="2020-07-13T16:14:33.244Z"><script src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js"></script><script>var autoChangeMode = '1'
-var t = Cookies.get("theme")
-if (autoChangeMode == '1'){
-  var isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
-  var isLightMode = window.matchMedia("(prefers-color-scheme: light)").matches
-  var isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
-  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-  if (t === undefined){
-    if (isLightMode) activateLightMode()
-    else if (isDarkMode) activateDarkMode()
-    else if (isNotSpecified || hasNoSupport){
-      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
-      var now = new Date()
-      var hour = now.getHours()
-      var isNight = hour < 6 || hour >= 18
-      isNight ? activateDarkMode() : activateLightMode()
-  }
-  } else if (t == 'light') activateLightMode()
-  else activateDarkMode()
+    <meta name="author" content="潇枫十一">
 
-} else if (autoChangeMode == '2'){
-  now = new Date();
-  hour = now.getHours();
-  isNight = hour < 6 || hour >= 18
-  if(t === undefined) isNight? activateDarkMode() : activateLightMode()
-  else if (t === 'light') activateLightMode()
-  else activateDarkMode() 
-} else {
-  if ( t == 'dark' ) activateDarkMode()
-  else if ( t == 'light') activateLightMode()
-}
 
-function activateDarkMode(){
-  document.documentElement.setAttribute('data-theme', 'dark')
-  if (document.querySelector('meta[name="theme-color"]') !== null){
-    document.querySelector('meta[name="theme-color"]').setAttribute('content','#000')
-  }
-}
-function activateLightMode(){
-  document.documentElement.setAttribute('data-theme', 'light')
-  if (document.querySelector('meta[name="theme-color"]') !== null){
-  document.querySelector('meta[name="theme-color"]').setAttribute('content','#fff')
-  }
-}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="canonical" href="http://blog.iavjkaede.com/2019/06/01/ASP.NET%20Website%20Background%20Job/"><link rel="prev" title=".Net 中MimeType 的获取" href="http://blog.iavjkaede.com/2020/05/18/Get%20MimeType%20via%20.NET/"><link rel="next" title="内网SVN穿透踩坑" href="http://blog.iavjkaede.com/2019/03/03/SVN%20nat/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web"><script>var GLOBAL_CONFIG = { 
-  root: '/',
-  algolia: undefined,
-  localSearch: undefined,
-  translate: undefined,
-  copy: {
-    success: '复制成功',
-    error: '复制错误',
-    noSupport: '浏览器不支持'
-  },
-  bookmark: {
-    message_prev: '按',
-    message_next: '键将本页加入书签'
-  },
-  runtime_unit: '天',
-  runtime: false,
-  copyright: undefined,
-  ClickShowText: undefined,
-  medium_zoom: true,
-  fancybox: true,
-  Snackbar: undefined,
-  baiduPush: false,
-  highlightCopy: true,
-  highlightLang: true,
-  highlightShrink: 'false',
-  isFontAwesomeV5: true,
-  isPhotoFigcaption: false,
-  islazyload: true,
-  isanchor: false
-  
-}</script><script>var GLOBAL_CONFIG_SITE = { 
-  isPost: true,
-  isHome: false,
-  isSidebar: true  
-  }</script><noscript><style>
-#page-header {
-  opacity: 1
-}
-.justified-gallery img{
-  opacity: 1
-}
-</style></noscript><meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="归云阁" type="application/atom+xml">
-</head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">10</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">16</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">2</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 归云</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 御风</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 忘尘</span></a></div></div></div></div><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true">     </i><div id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#环境简介"><span class="toc-number">2.</span> <span class="toc-text">环境简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#系统环境"><span class="toc-number">2.1.</span> <span class="toc-text">系统环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开发环境"><span class="toc-number">2.2.</span> <span class="toc-text">开发环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#部署环境"><span class="toc-number">2.3.</span> <span class="toc-text">部署环境</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现"><span class="toc-number">3.</span> <span class="toc-text">实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#利用定时器实现后台任务"><span class="toc-number">3.1.</span> <span class="toc-text">利用定时器实现后台任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Application-End-中唤醒-IIS"><span class="toc-number">3.2.</span> <span class="toc-text">Application_End 中唤醒 IIS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IRegisteredObject-唤醒IIS"><span class="toc-number">3.3.</span> <span class="toc-text">IRegisteredObject 唤醒IIS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#IRegisteredObject-接口"><span class="toc-number">3.3.1.</span> <span class="toc-text">IRegisteredObject 接口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#IRegisteredObject-使用"><span class="toc-number">3.3.2.</span> <span class="toc-text">IRegisteredObject 使用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#完整代码"><span class="toc-number">3.4.</span> <span class="toc-text">完整代码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#JobHost-cs"><span class="toc-number">3.4.1.</span> <span class="toc-text">JobHost.cs</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#JobManager-cs"><span class="toc-number">3.4.1.1.</span> <span class="toc-text">JobManager.cs</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最后"><span class="toc-number">4.</span> <span class="toc-text">最后</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol></div></div></div><div id="body-wrap"><div class="post-bg" id="nav" style="background-image: url(https://image.zsver.com/2020/05/23/5f1cb7c259843.jpg)"><div id="page-header"><span class="pull_left" id="blog_name"><a class="blog_title" id="site-name" href="/">归云阁</a></span><span class="pull_right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 归云</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 御风</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 忘尘</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fa fa-bars fa-fw" aria-hidden="true"></i></a></span></span></div><div id="post-info"><div id="post-title"><div class="posttitle">ASP.NET 之 IIS托管的后台任务</div></div><div id="post-meta"><div class="meta-firstline"><time class="post-meta__date"><span class="post-meta__date-created" title="发表于 2019-06-01 12:39:00"><i class="fa fa-calendar" aria-hidden="true"></i> 发表于 2019-06-01</span><span class="post-meta__separator">|</span><span class="post-meta__date-updated" title="更新于 2020-07-14 00:14:33"><i class="fa fa-history" aria-hidden="true"></i> 更新于 2020-07-14</span></time><span class="post-meta__categories"><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/NET/">.NET</a></span></div><div class="meta-secondline"> </div><div class="meta-thirdline"><span class="post-meta-pv-cv"></span><span class="post-meta-commentcount"></span></div></div></div></div><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>&emsp;&emsp;可能有这样一个需求，我们希望网站后台每隔一段时间自动执行某些任务。然而在网站部署到IIS上的情况下，由于IIS应用程序池自动回收的原因，导致任务中断，无法一直保持后台运行。</p>
-<p>​现在，我们来找出一个解决方法。嗯。</p>
-<h2 id="环境简介"><a href="#环境简介" class="headerlink" title="环境简介"></a>环境简介</h2><p>这里是我在做这件事情时的一个部署和开发所使用的环境。</p>
+    <meta name="subtitle" content="破风万里行，终有雀归日">
+
+
+
+
+<title>ASP.NET 之 IIS托管的后台任务 | 雀归</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="雀归" type="application/atom+xml">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">雀归</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">雀归</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">ASP.NET 之 IIS托管的后台任务</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">潇枫十一</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">六月 1, 2019&nbsp;&nbsp;12:39:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/NET/">.NET</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>&emsp;&emsp;在 ASP.NET 网站开发中，可能存在这样一个需求，我们希望网站后台能够每隔一段时间自动地执行某些任务，用定时器之类技术实现这个功能并不困难，但是在网站部署到IIS上的情况下，由于IIS应用程序池自动回收的原因，导致任务在IIS回收后中断，无法持续后台运行。</p>
+<p>​现在，我们就解决这个问题。</p>
+<h2 id="环境简介"><a href="#环境简介" class="headerlink" title="环境简介"></a>环境简介</h2><p>这里是我当前的开发和部署所使用的环境。</p>
 <h3 id="系统环境"><a href="#系统环境" class="headerlink" title="系统环境"></a>系统环境</h3><p>Windows 10 1903</p>
 <h3 id="开发环境"><a href="#开发环境" class="headerlink" title="开发环境"></a>开发环境</h3><p>工具：Visual Studio 2019</p>
 <p>SDK：.Netframework 4.6.2</p>
@@ -98,48 +211,122 @@ function activateLightMode(){
 <p><code>JobManager.Start();</code></p>
 <p>有关Timer的用法 可参考MSDN</p>
 <p><a href="https://docs.microsoft.com/zh-cn/dotnet/api/system.threading.timer?f1url=https%3A%2F%2Fmsdn.microsoft.com%2Fquery%2Fdev15.query%3FappId%3DDev15IDEF1%26l%3DZH-CN%26k%3Dk(System.Threading.Timer);k(TargetFrameworkMoniker-.NETFramework,Version%3Dv4.6.2);k(DevLang-csharp)%26rd%3Dtrue&view=netframework-4.8" target="_blank" rel="noopener">Timer Class</a></p>
-<p><strong>这样实现的任务有个致命缺陷，IIS 应用程序池自动回收的时候会毫不留情的将其摧毁。</strong></p>
+<p><strong>前言提到过，单单这样实现的任务并不能保证后台执行，IIS 应用程序池自动回收的时候会毫不留情的将其摧毁。</strong></p>
 <p>下面有两种异曲同工的解决方式。</p>
 <hr>
-<h3 id="Application-End-中唤醒-IIS"><a href="#Application-End-中唤醒-IIS" class="headerlink" title="Application_End 中唤醒 IIS"></a>Application_End 中唤醒 IIS</h3><p>​应用程序池进行回收的时候会调用<em>Application_End</em> 方法，所以，在这里继续将IIS唤醒即可。  </p>
-<p>​我把关键的代码放在这里</p>
+<h3 id="1-Application-End-中唤醒-IIS"><a href="#1-Application-End-中唤醒-IIS" class="headerlink" title="1.Application_End 中唤醒 IIS"></a>1.Application_End 中唤醒 IIS</h3><p>​&emsp;&emsp;IIS的应用程序池进行回收的时候会调用<em>Application_End</em> 方法，有了这个条件，我们便可以在<em>Application_End</em>方法中做些文章了。<br>怎么做呢，我们只简单的访问一下自己的网就好了。<br>IIS 想休息，因为觉得没人拜访了，那我们就登门拜访。</p>
+<p>​关键代码如下所示</p>
 <p>！<strong>Global.asax.cs</strong></p>
-<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">async</span> <span class="keyword">void</span> <span class="title">Application_End</span>(<span class="params"><span class="keyword">object</span> sender,EventArgs e</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 从这里唤醒你的网站，所以我们需要得到网站的地址</span></span><br><span class="line">    <span class="keyword">string</span> url = <span class="string">"http://www.yousite.com"</span>;</span><br><span class="line">    <span class="keyword">try</span>&#123;</span><br><span class="line">          <span class="keyword">using</span>(HttpClient client = <span class="keyword">new</span> HttpClient())</span><br><span class="line">          &#123;</span><br><span class="line">             <span class="keyword">var</span> response = <span class="keyword">await</span> client.GetAsync(url);</span><br><span class="line">          &#125;</span><br><span class="line">    &#125;<span class="keyword">catch</span>(Exception)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 处理可能出现的异常</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">async</span> <span class="keyword">void</span> <span class="title">Application_End</span>(<span class="params"><span class="keyword">object</span> sender,EventArgs e</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 从这里唤醒你的网站，所以我们需要得到网站的地址</span></span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> 网址不要使用硬编码表示</span></span><br><span class="line">    <span class="keyword">string</span> url = <span class="string">"http://www.yousite.com"</span>;</span><br><span class="line">    <span class="keyword">try</span>&#123;</span><br><span class="line">          <span class="keyword">using</span>(HttpClient client = <span class="keyword">new</span> HttpClient())</span><br><span class="line">          &#123;</span><br><span class="line">             <span class="keyword">var</span> response = <span class="keyword">await</span> client.GetAsync(url);</span><br><span class="line">          &#125;</span><br><span class="line">    &#125;<span class="keyword">catch</span>(Exception)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// <span class="doctag">TODO:</span> 处理可能出现的异常</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>可能还需要写个日志来记录情况或者用<em>HttpWebRequest</em>来发起请求，都没问题。</p>
-<p>我们来看下一种方式。</p>
+<p>可能还需要写个日志来记录情况或者用<em>HttpWebRequest</em>来发起请求，都取决与聪明的你。</p>
+<p>来看下一种方式。</p>
 <hr>
-<h3 id="IRegisteredObject-唤醒IIS"><a href="#IRegisteredObject-唤醒IIS" class="headerlink" title="IRegisteredObject 唤醒IIS"></a>IRegisteredObject 唤醒IIS</h3><h4 id="IRegisteredObject-接口"><a href="#IRegisteredObject-接口" class="headerlink" title="IRegisteredObject 接口"></a>IRegisteredObject 接口</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">IRegisteredObject</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Stop</span>(<span class="params"><span class="keyword">bool</span> immediate</span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-IRegisteredObject-唤醒IIS"><a href="#2-IRegisteredObject-唤醒IIS" class="headerlink" title="2.IRegisteredObject 唤醒IIS"></a>2.IRegisteredObject 唤醒IIS</h3><h4 id="IRegisteredObject-接口"><a href="#IRegisteredObject-接口" class="headerlink" title="IRegisteredObject 接口"></a>IRegisteredObject 接口</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">IRegisteredObject</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Stop</span>(<span class="params"><span class="keyword">bool</span> immediate</span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>​它是在<code>System.Web.Hosting</code> 下的一个接口，它是做什么用的呢？</p>
 <p>搬运一下MSDN的描述 ：</p>
 <hr>
 <p><em>可以通过调用创建已注册对象的实例<a href="https://docs.microsoft.com/zh-cn/dotnet/api/system.web.hosting.applicationmanager.createobject?view=netframework-4.8" target="_blank" rel="noopener">ApplicationManager.CreateObject</a>的应用程序管理器中的方法。 应用程序管理器将新创建的对象返回给调用方，然后在对象调用特定于类型的方法。 在启动期间，已注册的对象应调用<a href="https://docs.microsoft.com/zh-cn/dotnet/api/system.web.hosting.hostingenvironment.registerobject?view=netframework-4.8" target="_blank" rel="noopener">HostingEnvironment.RegisterObject</a>方法以完成注册的对象。</em></p>
 <p><em>当应用程序管理器需要停止已注册的对象时，它将调用<a href="https://docs.microsoft.com/zh-cn/dotnet/api/system.web.hosting.iregisteredobject.stop?view=netframework-4.8" target="_blank" rel="noopener">Stop</a>方法</em></p>
-<p>是的，很抽象，反正这个描述我是看不懂。</p>
-<p>简单说一下，就是<strong>应用程序池将要回收的时候，会调用Stop方法</strong>，那么我们可以在Stop中实现上面同样的逻辑。</p>
+<p>简而言之，就是<strong>应用程序池将要回收的时候，会调用Stop方法</strong>，那么我们可以在<em>Stop</em>方法中实现与上面同样的逻辑。</p>
 <hr>
 <h4 id="IRegisteredObject-使用"><a href="#IRegisteredObject-使用" class="headerlink" title="IRegisteredObject 使用"></a>IRegisteredObject 使用</h4><p>首先要有一个类继承自 <code>IRegisteredObject</code></p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">JobHost</span>:<span class="title">IRegisteredObject</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">JobHost</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        HostingEnvironment.RegisterObject(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Stop</span>(<span class="params"><span class="keyword">bool</span> immediate</span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        <span class="comment">// 在这里唤醒IIS</span></span><br><span class="line">        HostingEnvironment.UnregisterObject(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>在使用JobHost 之前需要调用</p>
+<p>在使用 <em>JobHost</em> 之前需要调用</p>
 <p><code>HostingEnvironment.RegisterObject(this);</code> 进行注册</p>
-<p>在Stop 被调用时  要调用</p>
+<p>在 <em>Stop</em> 方法被调用时调用</p>
 <p><code>HostingEnvironment.UnregisterObject(this);</code> 进行反注册</p>
 <hr>
-<h3 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h3><p>通过第二种解决方式实现后台任务的完整代码</p>
-<h4 id="JobHost-cs"><a href="#JobHost-cs" class="headerlink" title="JobHost.cs"></a>JobHost.cs</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title">JobHost</span> : <span class="title">IRegisteredObject</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">object</span> m_lock = <span class="keyword">new</span> <span class="keyword">object</span> ();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">bool</span> m_shuttingDown;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">JobHost</span> (<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        HostingEnvironment.RegisterObject (<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Stop</span> (<span class="params"><span class="keyword">bool</span> immediate</span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        <span class="keyword">lock</span> (m_lock)</span><br><span class="line">        &#123;</span><br><span class="line">            m_shuttingDown = <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        HostingEnvironment.UnregisterObject (<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 程序池被回收的时候重新唤醒iis</span></span><br><span class="line">        JobManager.Wakeup ();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">DoWork</span> (<span class="params">Action work</span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        <span class="keyword">lock</span> (m_lock)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (m_shuttingDown)</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            work ();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h3><p>通过第二种方式实现后台任务的完整代码</p>
+<h4 id="JobHost-cs"><a href="#JobHost-cs" class="headerlink" title="JobHost.cs"></a>JobHost.cs</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title">JobHost</span> : <span class="title">IRegisteredObject</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">object</span> m_lock = <span class="keyword">new</span> <span class="keyword">object</span> ();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">bool</span> m_shuttingDown;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">JobHost</span> (<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        <span class="comment">// 注册对象</span></span><br><span class="line">        HostingEnvironment.RegisterObject (<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// IIS进行回收时调用</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Stop</span> (<span class="params"><span class="keyword">bool</span> immediate</span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        <span class="keyword">lock</span> (m_lock)</span><br><span class="line">        &#123;</span><br><span class="line">            m_shuttingDown = <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        HostingEnvironment.UnregisterObject (<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 程序池被回收的时候重新唤醒iis</span></span><br><span class="line">        JobManager.Wakeup ();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h5 id="JobManager-cs"><a href="#JobManager-cs" class="headerlink" title="JobManager.cs"></a>JobManager.cs</h5><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">JobManager</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Timer m_timer;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">readonly</span> JobHost m_jobHost = <span class="keyword">new</span> JobHost();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="title">JobManager</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">         m_timer = <span class="keyword">new</span> Timer(<span class="keyword">new</span> TimerCallback(TimerCallback));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">TimerCallback</span>(<span class="params"><span class="keyword">object</span> target</span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        m_jobHost.DoWork(()=&gt;&#123;</span><br><span class="line">            <span class="comment">// do work here</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Start</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        <span class="comment">// interval 1 min</span></span><br><span class="line">        m_timer.Change(TimeSpan.Zero, TimeSpan.FromMinutes(<span class="number">1</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Wakeup</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        <span class="keyword">string</span> url = <span class="string">"www.yousite.com"</span>;</span><br><span class="line">        <span class="keyword">try</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">using</span>(HttpClient client = <span class="keyword">new</span> HttpClient())</span><br><span class="line">            &#123;</span><br><span class="line">               <span class="keyword">var</span> response = <span class="keyword">await</span> client.GetAsync(url);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;<span class="keyword">catch</span>(Exception)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 处理可能出现的异常</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="JobManager-cs"><a href="#JobManager-cs" class="headerlink" title="JobManager.cs"></a>JobManager.cs</h5><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">JobManager</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Timer m_timer;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">readonly</span> JobHost m_jobHost = <span class="keyword">new</span> JobHost();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="title">JobManager</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">         m_timer = <span class="keyword">new</span> Timer(<span class="keyword">new</span> TimerCallback(TimerCallback));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">TimerCallback</span>(<span class="params"><span class="keyword">object</span> target</span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        m_jobHost.DoWork(()=&gt;&#123;</span><br><span class="line">            <span class="comment">// do work here</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Start</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        <span class="comment">// interval 1 min</span></span><br><span class="line">        m_timer.Change(TimeSpan.Zero, TimeSpan.FromMinutes(<span class="number">1</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Wakeup</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        <span class="keyword">string</span> url = <span class="string">"www.yousite.com"</span>;</span><br><span class="line">        <span class="keyword">try</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">using</span>(HttpClient client = <span class="keyword">new</span> HttpClient())</span><br><span class="line">            &#123;</span><br><span class="line">               <span class="keyword">var</span> response = <span class="keyword">await</span> client.GetAsync(url);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;<span class="keyword">catch</span>(Exception)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//TODO 处理可能出现的异常</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>我这里讲的不够详细，如果要参考更多细节，这里贴出参考的blog</p>
-<p><a href="https://haacked.com/archive/2011/10/16/the-dangers-of-implementing-recurring-background-tasks-in-asp-net.aspx/" target="_blank" rel="noopener">The Dangers of Implementing Recurring Background Tasks In ASP.NET</a></p>
+<p>我这里说的可能不太详尽，如果想要参考更多细节，这里贴出参考的blog</p>
+<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><p><a href="https://haacked.com/archive/2011/10/16/the-dangers-of-implementing-recurring-background-tasks-in-asp-net.aspx/" target="_blank" rel="noopener">The Dangers of Implementing Recurring Background Tasks In ASP.NET</a></p>
 <hr>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>​这种方式的原理很简单，IIS就像个贪睡的孩子，当他快要打瞌睡的时候，你就拍拍他的脑袋。</p>
-<p>   “ 喂，臭弟弟，起来写作业了。”</p>
-<p>   没错，就是这么残酷😂。</p>
-<p>！<strong>当我们需要持续稳定的执行后台任务的时候，更好的方式应该是写一个服务程序，或者控制台</strong></p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>​这个方法很简单，IIS总觉得当没人访问站点的时候，它就应该减少该站点的资源占用。<br>    抱歉<br>   “我不要你觉得，我要我觉得 。”</p>
+<p>   没错，不要偷懒。</p>
+<p>！<strong>当我们需要持续稳定的执行后台任务的时候，更好的方式应该是写一个服务程序，或者控制台也可以</strong></p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.2cto.com/kf/201112/115331.html" target="_blank" rel="noopener">IIS 自动回收导致后台定时器失效的问题解决</a></p>
 <p><a href="https://haacked.com/archive/2011/10/16/the-dangers-of-implementing-recurring-background-tasks-in-asp-net.aspx/" target="_blank" rel="noopener">The Dangers of Implementing Recurring Background Tasks In ASP.NET</a></p>
 <p><a href="https://docs.microsoft.com/zh-cn/dotnet/api/system.threading.timer?f1url=https%3A%2F%2Fmsdn.microsoft.com%2Fquery%2Fdev15.query%3FappId%3DDev15IDEF1%26l%3DZH-CN%26k%3Dk(System.Threading.Timer);k(TargetFrameworkMoniker-.NETFramework,Version%3Dv4.6.2);k(DevLang-csharp)%26rd%3Dtrue&view=netframework-4.8" target="_blank" rel="noopener">Timer Class</a></p>
-</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">潇枫11</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://blog.iavjkaede.com/2019/06/01/ASP.NET%20Website%20Background%20Job/">http://blog.iavjkaede.com/2019/06/01/ASP.NET%20Website%20Background%20Job/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://blog.iavjkaede.com" target="_blank">归云阁</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/IIS/">IIS</a><a class="post-meta__tags" href="/tags/Background-Task/">Background Task</a><a class="post-meta__tags" href="/tags/C/">C#</a></div><div class="post_share"><div class="social-share" data-image="https://image.zsver.com/2020/05/23/ff71252584474.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"/><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js"></script></div></div><nav class="pagination_post" id="pagination"><div class="prev-post pull_left"><a href="/2020/05/18/Get%20MimeType%20via%20.NET/"><img class="prev_cover" data-src="https://image.zsver.com/2020/05/23/d5c475845aca9.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">.Net 中MimeType 的获取</div></div></a></div><div class="next-post pull_right"><a href="/2019/03/03/SVN%20nat/"><img class="next_cover" data-src="https://image.zsver.com/2020/05/23/1bd82249672b3.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">内网SVN穿透踩坑</div></div></a></div></nav></article></main><footer id="footer" style="background-image: url(https://image.zsver.com/2020/05/23/5f1cb7c259843.jpg)" data-type="photo"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2020 By 潇枫11</div><div class="framework-info"><span>Power by </span><a href="https://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><i class="fa fa-book" id="readmode" title="阅读模式"></i><i class="fa fa-plus" id="font_plus" title="放大字体"></i><i class="fa fa-minus" id="font_minus" title="缩小字体"></i><i class="darkmode far fa-moon" id="darkmode" title="夜间模式"></i></div><div id="rightside-config-show"><div id="rightside_config" title="设置"><i class="fa fa-cog" aria-hidden="true"></i></div><i class="fa fa-list-ul close" id="mobile-toc-button" title="目录" aria-hidden="true"></i><i class="fa fa-arrow-up" id="go-up" title="回到顶部" aria-hidden="true"></i></div></section><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@latest/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script></body></html>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>潇枫十一</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://blog.iavjkaede.com/2019/06/01/ASP.NET%20Website%20Background%20Job/">http://blog.iavjkaede.com/2019/06/01/ASP.NET%20Website%20Background%20Job/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/C/"># C#</a>
+                    
+                        <a href="/tags/IIS/"># IIS</a>
+                    
+                        <a href="/tags/Background-Task/"># Background Task</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/05/18/Get%20MimeType%20via%20.NET/">.Net 中MimeType 的获取</a>
+            
+            
+            <a class="next" rel="next" href="/2019/03/03/SVN%20nat/">内网SVN穿透踩坑</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© 潇枫十一 | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+    
+</body>
+</html>

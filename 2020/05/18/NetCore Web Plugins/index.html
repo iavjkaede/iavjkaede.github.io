@@ -1,90 +1,203 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>.NetCore Web 项目的插件实现 | 归云阁</title><meta name="description" content="前言为什么使用插件的方式去完成项目？并不是因为这很酷，仅仅是，我们希望项目变得更容易维护，更容易拓展，彼此之间的依赖更清晰更简单。使用插件，我们可以在不影响现有功能情况下去开发新的功能，随意替换现有的功能模块，连重新编译都不需要。看起来确实挺酷，这么酷的功能，在C#中实现起来却并不复杂。嗯，那就分享一下我在.NetCore 项目中使用插件的方式。 环境简介系统环境Windows 10 LTSC 2"><meta name="keywords" content="C#,Plugins"><meta name="author" content="潇枫11"><meta name="copyright" content="潇枫11"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.png"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="dns-prefetch" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="crossorigin"/><link rel="dns-prefetch" href="https://fonts.googleapis.com"/><meta name="twitter:card" content="summary"><meta name="twitter:title" content=".NetCore Web 项目的插件实现"><meta name="twitter:description" content="前言为什么使用插件的方式去完成项目？并不是因为这很酷，仅仅是，我们希望项目变得更容易维护，更容易拓展，彼此之间的依赖更清晰更简单。使用插件，我们可以在不影响现有功能情况下去开发新的功能，随意替换现有的功能模块，连重新编译都不需要。看起来确实挺酷，这么酷的功能，在C#中实现起来却并不复杂。嗯，那就分享一下我在.NetCore 项目中使用插件的方式。 环境简介系统环境Windows 10 LTSC 2"><meta name="twitter:image" content="https://image.zsver.com/2020/05/23/67597c6252dd0.jpg"><meta property="og:type" content="article"><meta property="og:title" content=".NetCore Web 项目的插件实现"><meta property="og:url" content="http://blog.iavjkaede.com/2020/05/18/NetCore%20Web%20Plugins/"><meta property="og:site_name" content="归云阁"><meta property="og:description" content="前言为什么使用插件的方式去完成项目？并不是因为这很酷，仅仅是，我们希望项目变得更容易维护，更容易拓展，彼此之间的依赖更清晰更简单。使用插件，我们可以在不影响现有功能情况下去开发新的功能，随意替换现有的功能模块，连重新编译都不需要。看起来确实挺酷，这么酷的功能，在C#中实现起来却并不复杂。嗯，那就分享一下我在.NetCore 项目中使用插件的方式。 环境简介系统环境Windows 10 LTSC 2"><meta property="og:image" content="https://image.zsver.com/2020/05/23/67597c6252dd0.jpg"><meta property="article:published_time" content="2020-05-18T15:22:37.125Z"><meta property="article:modified_time" content="2020-07-13T16:05:06.849Z"><script src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js"></script><script>var autoChangeMode = '1'
-var t = Cookies.get("theme")
-if (autoChangeMode == '1'){
-  var isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
-  var isLightMode = window.matchMedia("(prefers-color-scheme: light)").matches
-  var isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
-  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-  if (t === undefined){
-    if (isLightMode) activateLightMode()
-    else if (isDarkMode) activateDarkMode()
-    else if (isNotSpecified || hasNoSupport){
-      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
-      var now = new Date()
-      var hour = now.getHours()
-      var isNight = hour < 6 || hour >= 18
-      isNight ? activateDarkMode() : activateLightMode()
-  }
-  } else if (t == 'light') activateLightMode()
-  else activateDarkMode()
+    <meta name="author" content="潇枫十一">
 
-} else if (autoChangeMode == '2'){
-  now = new Date();
-  hour = now.getHours();
-  isNight = hour < 6 || hour >= 18
-  if(t === undefined) isNight? activateDarkMode() : activateLightMode()
-  else if (t === 'light') activateLightMode()
-  else activateDarkMode() 
-} else {
-  if ( t == 'dark' ) activateDarkMode()
-  else if ( t == 'light') activateLightMode()
-}
 
-function activateDarkMode(){
-  document.documentElement.setAttribute('data-theme', 'dark')
-  if (document.querySelector('meta[name="theme-color"]') !== null){
-    document.querySelector('meta[name="theme-color"]').setAttribute('content','#000')
-  }
-}
-function activateLightMode(){
-  document.documentElement.setAttribute('data-theme', 'light')
-  if (document.querySelector('meta[name="theme-color"]') !== null){
-  document.querySelector('meta[name="theme-color"]').setAttribute('content','#fff')
-  }
-}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="canonical" href="http://blog.iavjkaede.com/2020/05/18/NetCore%20Web%20Plugins/"><link rel="prev" title="NetCore 使用 ImageSharp 为图片添加水印" href="http://blog.iavjkaede.com/2020/05/18/NetCore%20ImageSharp%20Watermark/"><link rel="next" title=".Net 中MimeType 的获取" href="http://blog.iavjkaede.com/2020/05/18/Get%20MimeType%20via%20.NET/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web"><script>var GLOBAL_CONFIG = { 
-  root: '/',
-  algolia: undefined,
-  localSearch: undefined,
-  translate: undefined,
-  copy: {
-    success: '复制成功',
-    error: '复制错误',
-    noSupport: '浏览器不支持'
-  },
-  bookmark: {
-    message_prev: '按',
-    message_next: '键将本页加入书签'
-  },
-  runtime_unit: '天',
-  runtime: false,
-  copyright: undefined,
-  ClickShowText: undefined,
-  medium_zoom: true,
-  fancybox: true,
-  Snackbar: undefined,
-  baiduPush: false,
-  highlightCopy: true,
-  highlightLang: true,
-  highlightShrink: 'false',
-  isFontAwesomeV5: true,
-  isPhotoFigcaption: false,
-  islazyload: true,
-  isanchor: false
-  
-}</script><script>var GLOBAL_CONFIG_SITE = { 
-  isPost: true,
-  isHome: false,
-  isSidebar: true  
-  }</script><noscript><style>
-#page-header {
-  opacity: 1
-}
-.justified-gallery img{
-  opacity: 1
-}
-</style></noscript><meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="归云阁" type="application/atom+xml">
-</head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">10</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">16</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">2</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 归云</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 御风</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 忘尘</span></a></div></div></div></div><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true">     </i><div id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#环境简介"><span class="toc-number">2.</span> <span class="toc-text">环境简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#系统环境"><span class="toc-number">2.1.</span> <span class="toc-text">系统环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开发环境"><span class="toc-number">2.2.</span> <span class="toc-text">开发环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开发工具"><span class="toc-number">2.3.</span> <span class="toc-text">开发工具</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#准备"><span class="toc-number">3.</span> <span class="toc-text">准备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#项目准备"><span class="toc-number">3.1.</span> <span class="toc-text">项目准备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据库准备"><span class="toc-number">3.2.</span> <span class="toc-text">数据库准备</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开始"><span class="toc-number">4.</span> <span class="toc-text">开始</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#加载Controller"><span class="toc-number">4.1.</span> <span class="toc-text">加载Controller</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#修改Startup-cs"><span class="toc-number">4.1.1.</span> <span class="toc-text">修改Startup.cs*</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#添加PluginController-cs"><span class="toc-number">4.1.2.</span> <span class="toc-text">添加PluginController.cs</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#编写tasks-json"><span class="toc-number">4.1.3.</span> <span class="toc-text">编写tasks.json</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#启动"><span class="toc-number">4.1.4.</span> <span class="toc-text">启动</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注入Services"><span class="toc-number">4.2.</span> <span class="toc-text">注入Services</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#用来注入的接口"><span class="toc-number">4.2.1.</span> <span class="toc-text">用来注入的接口*</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#完成注入"><span class="toc-number">4.2.2.</span> <span class="toc-text">完成注入*</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#编写Service进行测试"><span class="toc-number">4.2.3.</span> <span class="toc-text">编写Service进行测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#启动-1"><span class="toc-number">4.2.4.</span> <span class="toc-text">启动</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#独立配置文件"><span class="toc-number">4.3.</span> <span class="toc-text">独立配置文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ServicesRegister-cs中配Config"><span class="toc-number">4.3.1.</span> <span class="toc-text">ServicesRegister.cs中配Config*</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Plugin1Config-cs"><span class="toc-number">4.3.2.</span> <span class="toc-text">Plugin1Config.cs</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#添加配置文件"><span class="toc-number">4.3.3.</span> <span class="toc-text">添加配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#测试配置"><span class="toc-number">4.3.4.</span> <span class="toc-text">测试配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#再次启动"><span class="toc-number">4.3.5.</span> <span class="toc-text">再次启动</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#映射Model"><span class="toc-number">4.4.</span> <span class="toc-text">映射Model</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#数据库表结构"><span class="toc-number">4.4.1.</span> <span class="toc-text">数据库表结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置数据库上下文"><span class="toc-number">4.4.2.</span> <span class="toc-text">配置数据库上下文*</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#映射Model-并实现-IEntiyTypeConfigration"><span class="toc-number">4.4.3.</span> <span class="toc-text">映射Model 并实现 IEntiyTypeConfigration*</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#注入数据库上下文"><span class="toc-number">4.4.4.</span> <span class="toc-text">注入数据库上下文</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#测试数据库上下文"><span class="toc-number">4.4.5.</span> <span class="toc-text">测试数据库上下文</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#又又启动"><span class="toc-number">4.4.6.</span> <span class="toc-text">又又启动</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最后"><span class="toc-number">5.</span> <span class="toc-text">最后</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2020年7月14日-更"><span class="toc-number">6.</span> <span class="toc-text">2020年7月14日 更</span></a></li></ol></div></div></div><div id="body-wrap"><div class="post-bg" id="nav" style="background-image: url(https://image.zsver.com/2020/05/23/67597c6252dd0.jpg)"><div id="page-header"><span class="pull_left" id="blog_name"><a class="blog_title" id="site-name" href="/">归云阁</a></span><span class="pull_right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 归云</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 御风</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 忘尘</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fa fa-bars fa-fw" aria-hidden="true"></i></a></span></span></div><div id="post-info"><div id="post-title"><div class="posttitle">.NetCore Web 项目的插件实现</div></div><div id="post-meta"><div class="meta-firstline"><time class="post-meta__date"><span class="post-meta__date-created" title="发表于 2020-05-18 23:22:37"><i class="fa fa-calendar" aria-hidden="true"></i> 发表于 2020-05-18</span><span class="post-meta__separator">|</span><span class="post-meta__date-updated" title="更新于 2020-07-14 00:05:06"><i class="fa fa-history" aria-hidden="true"></i> 更新于 2020-07-14</span></time><span class="post-meta__categories"><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/NET/">.NET</a></span></div><div class="meta-secondline"> </div><div class="meta-thirdline"><span class="post-meta-pv-cv"></span><span class="post-meta-commentcount"></span></div></div></div></div><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>为什么使用插件的方式去完成项目？并不是因为这很酷，仅仅是，我们希望项目变得更容易维护，更容易拓展，彼此之间的依赖更清晰更简单。使用插件，我们可以在不影响现有功能情况下去开发新的功能，随意替换现有的功能模块，连重新编译都不需要。看起来确实挺酷，这么酷的功能，在C#中实现起来却并不复杂。嗯，那就分享一下我在.NetCore 项目中使用插件的方式。</p>
+    <meta name="subtitle" content="破风万里行，终有雀归日">
+
+
+
+
+<title>.NetCore Web 项目的插件实现 | 雀归</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="雀归" type="application/atom+xml">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">雀归</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">雀归</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">.NetCore Web 项目的插件实现</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">潇枫十一</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">五月 18, 2020&nbsp;&nbsp;23:22:37</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/NET/">.NET</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>为什么使用插件的方式去完成项目？并不是因为这很酷，仅仅是，我们希望降低代码的耦合度，让项目变得更容易维护，更容易拓展，彼此之间的依赖更清晰更简单。使用插件，我们可以在不影响现有功能情况下去开发新的功能，随意替换现有的功能模块，而不需要重新构建整个项目。看起来确实挺酷，这么酷的功能，在C#中实现起来却并不复杂。嗯，那就分享一下我在.NetCore 项目中使用插件的方式。</p>
 <h2 id="环境简介"><a href="#环境简介" class="headerlink" title="环境简介"></a>环境简介</h2><h3 id="系统环境"><a href="#系统环境" class="headerlink" title="系统环境"></a>系统环境</h3><p>Windows 10 LTSC 2019</p>
 <h3 id="开发环境"><a href="#开发环境" class="headerlink" title="开发环境"></a>开发环境</h3><p>SDK： .NetCore 2.2</p>
 <p>Database：SQLite 3</p>
@@ -105,7 +218,7 @@ function activateLightMode(){
 <p>编辑<strong>Startup.cs</strong> 中的<code>ConfigureServices</code>方法中使用以下代码配置MVC</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ConfigureServices</span>(<span class="params">IServiceCollection services</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    .....</span><br><span class="line"></span><br><span class="line">    services.AddMvc().ConfigureApplicationPartManager(manager =&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">string</span> path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);</span><br><span class="line">        <span class="keyword">var</span> assmeblyFiles = Directory.GetFiles (path, <span class="string">"*.dll"</span>);</span><br><span class="line">        assmeblyFiles.Select(AssemblyLoadContext.Default.LoadFromAssemblyPath)</span><br><span class="line">            .ToList().ForEach(assmebly =&gt;</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span> (assmebly.GetTypes().Any(<span class="keyword">typeof</span>(Controller).IsAssignableFrom))</span><br><span class="line">                &#123;</span><br><span class="line">                        AssemblyPart part = <span class="keyword">new</span> AssemblyPart(assmebly);</span><br><span class="line">                        manager.ApplicationParts.Add(part);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    .....</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Configure</span>(<span class="params">IApplicationBuilder app, IHostingEnvironment env</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (env.IsDevelopment())</span><br><span class="line">    &#123;</span><br><span class="line">        app.UseDeveloperExceptionPage();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    app.Run(async (context) =&gt;</span></span><br><span class="line"><span class="comment">    &#123;</span></span><br><span class="line"><span class="comment">        await context.Response.WriteAsync("Hello World!");</span></span><br><span class="line"><span class="comment">    &#125;);*/</span></span><br><span class="line">    app.UseMvc();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>‘*.dll’ 可以用如 *.plugin.dll 这样的字符串代替，取一个插件命名规则。最好把这个规则放在配置文件中。</p>
+<p>‘*.dll’ 可以用如 ‘*.plugin.dll’ 这样的字符串代替，取一个插件命名规则。最好把这个规则放在配置文件中。</p>
 <p>接下来编写一个Controller进行测试。</p>
 <hr>
 <p>项目 – <strong>Plugin1</strong></p>
@@ -128,7 +241,7 @@ function activateLightMode(){
 <p><em>注意，第一次运行命令可能会询问是复制的文件还是文件夹，在任务终端中，输入<code>F</code>确定是文件即可。</em></p>
 <p>执行成功后在<strong>Host</strong>的<code>bin/Debug/netcoreapp2.2</code>目录下瞄一眼有没有Plugin1.dll，有的话就👌。</p>
 <hr>
-<h4 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h4><p><code>F5</code>启动项目，然后在浏览器输入 <a href="https://5001/api/plugin/ping。" target="_blank" rel="noopener">https://5001/api/plugin/ping。</a></p>
+<h4 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h4><p><code>F5</code>启动项目，然后在浏览器输入 <a href="https://5001/api/plugin/ping" target="_blank" rel="noopener">https://5001/api/plugin/ping</a>。</p>
 <p>当看到浏览器回复了一个’pong’ 之后，意味着，成功了😀。</p>
 <h3 id="注入Services"><a href="#注入Services" class="headerlink" title="注入Services"></a>注入Services</h3><p>Plugin1.dll 除了需要响应请求之外，它还需要使用IOC容器进行DI。.NetCore 已经内置了IOC容器，需要解决的问题就是：怎么把这个容器传递给插件🤔。这里使用反射来完成它。</p>
 <p>思路是这样，定义一个用来注入服务的接口。在<strong>Host</strong>项目中，需要遍历所有实现了该接口的程序集并调用注入方法，然后在插件项目中实现该接口。当然，这个接口需要放在<strong>Share</strong>项目中。</p>
@@ -170,8 +283,8 @@ function activateLightMode(){
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> Microsoft.AspNetCore.Mvc;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">Plugin1</span></span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">ApiController</span>]</span><br><span class="line">    [<span class="meta">Route(<span class="meta-string">"api/[controller]/[action]"</span>)</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">PluginController</span> : <span class="title">Controller</span></span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">readonly</span> IAddService m_addService;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">PluginController</span>(<span class="params">IAddService addService</span>)</span></span><br><span class="line"><span class="function"></span>        &#123;</span><br><span class="line">            m_addService = addService;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">string</span> <span class="title">Ping</span>(<span class="params"></span>)</span> =&gt; <span class="string">"pong"</span>;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">string</span> <span class="title">PingService</span>(<span class="params"><span class="keyword">string</span> a, <span class="keyword">string</span> b</span>)</span> =&gt; m_addService.Add(a, b);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <hr>
-<h4 id="启动-1"><a href="#启动-1" class="headerlink" title="启动"></a>启动</h4><p>先执行 <code>build &amp; install plugin1</code>命令，然后<code>F5</code>启动。🚀</p>
-<p>一切完成，在浏览器地址栏输入 <a href="https://localhost:5001/api/plugin/pingservice?a=service&amp;b=done。" target="_blank" rel="noopener">https://localhost:5001/api/plugin/pingservice?a=service&amp;b=done。</a></p>
+<h4 id="启动项目"><a href="#启动项目" class="headerlink" title="启动项目"></a>启动项目</h4><p>先执行 <code>build &amp; install plugin1</code>命令，然后<code>F5</code>启动。🚀</p>
+<p>一切完成，在浏览器地址栏输入 <a href="https://localhost:5001/api/plugin/pingservice?a=service&b=done" target="_blank" rel="noopener">https://localhost:5001/api/plugin/pingservice?a=service&amp;b=done</a>。</p>
 <p>看看浏览器响应，是否把’service’ 和 ‘done’ 拼到一起了呢。</p>
 <p>再去调试控制台看打印的<code>Debug.WriteLine(&quot;Register plugin1&#39;s services&quot;, &quot;info: &quot;);</code> 有没有正确输出。👏👏👏</p>
 <h3 id="独立配置文件"><a href="#独立配置文件" class="headerlink" title="独立配置文件"></a>独立配置文件</h3><p>当决定让插件成为一个完整独立的功能模块时，插件应该使用独立的配置文件，配置过程和普通的项目配置没有太大区别，这里就简单讲一下。</p>
@@ -216,7 +329,7 @@ function activateLightMode(){
 <h4 id="再次启动"><a href="#再次启动" class="headerlink" title="再次启动"></a>再次启动</h4><p>现在像之前那样构建项目，在启动项目之前，把<strong>Plugin1</strong>的配置文件<strong>plugin1.json</strong>拷贝到<strong>Host</strong>目录下。</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这里我配置的是当前目录</span></span><br><span class="line"><span class="keyword">var</span> config = <span class="keyword">new</span> ConfigurationBuilder()</span><br><span class="line">                .SetBasePath(Directory.GetCurrentDirectory())</span><br><span class="line">                .AddJsonFile(<span class="string">"plugin1.json"</span>, <span class="literal">false</span>)</span><br><span class="line">                .Build();</span><br></pre></td></tr></table></figure>
 
-<p>启动之后，在浏览器地址栏输入<a href="https://localhost:5001/api/plugin/pingconfig。" target="_blank" rel="noopener">https://localhost:5001/api/plugin/pingconfig。</a></p>
+<p>启动之后，在浏览器地址栏输入<a href="https://localhost:5001/api/plugin/pingconfig" target="_blank" rel="noopener">https://localhost:5001/api/plugin/pingconfig</a>。</p>
 <p>看看有没有正常读取到配置。🙂</p>
 <h3 id="映射Model"><a href="#映射Model" class="headerlink" title="映射Model"></a>映射Model</h3><p>在插件中完成某些拓展功能时，可能需要数据库的表结构支持，但是，我不想把插件中的Model放到<strong>Share</strong>项目中，插件应该自己管理自己的Model。（究竟是放在Share中还是放在插件项目中，具体需要看插件的定位）</p>
 <p>需要准备一个数据库环境，我这里使用SQLite。</p>
@@ -274,8 +387,6 @@ function activateLightMode(){
 <p>构建Plugin1 需要添加的NuGet 包</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dotnet add .\Plugin1\ package  Microsoft.EntityFrameworkCore</span><br></pre></td></tr></table></figure>
 
-
-
 <h4 id="注入数据库上下文"><a href="#注入数据库上下文" class="headerlink" title="注入数据库上下文"></a>注入数据库上下文</h4><p>项目 – <strong>Host</strong></p>
 <p><strong>Host</strong> 中还需要在<strong>Startup.cs</strong>文件 <em>ConfigureServices</em>  方法中加上一行</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">services.AddDbContext&lt;HostDbContext&gt;();</span><br></pre></td></tr></table></figure>
@@ -295,7 +406,7 @@ function activateLightMode(){
 
 <p>emmm，这次是完结了。</p>
 <h4 id="又又启动"><a href="#又又启动" class="headerlink" title="又又启动"></a>又又启动</h4><p>构建插件，然后启动项目。</p>
-<p>在浏览器地址栏输入<a href="https://localhost:5001/api/plugin/pingdb。" target="_blank" rel="noopener">https://localhost:5001/api/plugin/pingdb。</a><br>怎么样，有结果了吗？👀</p>
+<p>在浏览器地址栏输入<a href="https://localhost:5001/api/plugin/pingdb" target="_blank" rel="noopener">https://localhost:5001/api/plugin/pingdb</a>。<br>怎么样，有结果了吗？👀</p>
 <h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>我的个人观点。</p>
 <p>我觉得可以从两个方向去使用插件</p>
 <ol>
@@ -306,4 +417,78 @@ function activateLightMode(){
 <p>还有一点，.NetCore 中已经没有AppDomain的概念了，插件无法实现热插拔。</p>
 <p>完结👌。</p>
 <h2 id="2020年7月14日-更"><a href="#2020年7月14日-更" class="headerlink" title="2020年7月14日 更"></a>2020年7月14日 更</h2><p>这个插件实现方式对 .netcore 2.2 还是可以的，对现在来讲，有些过时。</p>
-</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">潇枫11</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://blog.iavjkaede.com/2020/05/18/NetCore%20Web%20Plugins/">http://blog.iavjkaede.com/2020/05/18/NetCore%20Web%20Plugins/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://blog.iavjkaede.com" target="_blank">归云阁</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/C/">C#</a><a class="post-meta__tags" href="/tags/Plugins/">Plugins</a></div><div class="post_share"><div class="social-share" data-image="https://image.zsver.com/2020/05/23/ff71252584474.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"/><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js"></script></div></div><nav class="pagination_post" id="pagination"><div class="prev-post pull_left"><a href="/2020/05/18/NetCore%20ImageSharp%20Watermark/"><img class="prev_cover" data-src="https://image.zsver.com/2020/05/23/43208491ef0e8.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">NetCore 使用 ImageSharp 为图片添加水印</div></div></a></div><div class="next-post pull_right"><a href="/2020/05/18/Get%20MimeType%20via%20.NET/"><img class="next_cover" data-src="https://image.zsver.com/2020/05/23/d5c475845aca9.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">.Net 中MimeType 的获取</div></div></a></div></nav></article></main><footer id="footer" style="background-image: url(https://image.zsver.com/2020/05/23/67597c6252dd0.jpg)" data-type="photo"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2020 By 潇枫11</div><div class="framework-info"><span>Power by </span><a href="https://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><i class="fa fa-book" id="readmode" title="阅读模式"></i><i class="fa fa-plus" id="font_plus" title="放大字体"></i><i class="fa fa-minus" id="font_minus" title="缩小字体"></i><i class="darkmode far fa-moon" id="darkmode" title="夜间模式"></i></div><div id="rightside-config-show"><div id="rightside_config" title="设置"><i class="fa fa-cog" aria-hidden="true"></i></div><i class="fa fa-list-ul close" id="mobile-toc-button" title="目录" aria-hidden="true"></i><i class="fa fa-arrow-up" id="go-up" title="回到顶部" aria-hidden="true"></i></div></section><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@latest/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script></body></html>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>潇枫十一</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://blog.iavjkaede.com/2020/05/18/NetCore%20Web%20Plugins/">http://blog.iavjkaede.com/2020/05/18/NetCore%20Web%20Plugins/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/C/"># C#</a>
+                    
+                        <a href="/tags/Plugins/"># Plugins</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/05/18/Install%20nodejs%20for%20Debian%20WSL/">Linux子系统（WSL）Debian安装Nodejs</a>
+            
+            
+            <a class="next" rel="next" href="/2020/05/18/Get%20MimeType%20via%20.NET/">.Net 中MimeType 的获取</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© 潇枫十一 | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+    
+</body>
+</html>
