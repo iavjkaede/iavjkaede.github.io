@@ -36,9 +36,9 @@ IIS Express
 
 ## 实现
 
-### 利用定时器实现后台任务
+### 先看看如何利用定时器实现后台任务
 
-！**JobManager.cs**
+`JobManager.cs`
 
 ```csharp
 using System;
@@ -86,14 +86,14 @@ IIS 想休息，因为觉得没人拜访了，那我们就登门拜访。
 
 ​关键代码如下所示
 
-！**Global.asax.cs**
+`Global.asax.cs`
 
 ```csharp
 protected async void Application_End(object sender,EventArgs e)
 {
     // 从这里唤醒你的网站，所以我们需要得到网站的地址
     // TODO: 网址不要使用硬编码表示
-    string url = "http://www.yousite.com";
+    string url = "http://www.yoursite.com";
     try{
           using(HttpClient client = new HttpClient())
           {
@@ -247,8 +247,6 @@ public class JobManager
 
 我这里说的可能不太详尽，如果想要参考更多细节，这里贴出参考的blog
 
-## 引用
-
 [The Dangers of Implementing Recurring Background Tasks In ASP.NET](https://haacked.com/archive/2011/10/16/the-dangers-of-implementing-recurring-background-tasks-in-asp-net.aspx/)
 
 ---
@@ -260,8 +258,7 @@ public class JobManager
    “我不要你觉得，我要我觉得 。”
 
    没错，不要偷懒。
-
-！**当我们需要持续稳定的执行后台任务的时候，更好的方式应该是写一个服务程序，或者控制台也可以**
+**当然，这是一个投机取巧的方式，用它来完成一些不那么重要和准确的任务是可以的，如果这些任务特别重要，应该考虑使用更稳定和适合的方式，比如，Windows 服务**
 
 ## 参考
 

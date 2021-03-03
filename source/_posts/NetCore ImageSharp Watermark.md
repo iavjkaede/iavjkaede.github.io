@@ -48,6 +48,8 @@ public Stream Watermark(Stream origin, Stream mark, string position, float scale
      // position 可指定默认值
      // scale opacity 不可小于等于0
 
+     // TODO: 异常处理
+
      using(var originImage = Image.Load(origin))
      {
          using(var markImage = Image.Load(mark))
